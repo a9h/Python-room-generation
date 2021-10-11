@@ -1,0 +1,13 @@
+{
+    "rooms": [
+        
+        {
+            "RoomName" : "Kitchen",
+            "LootTables" : ["Knife", "Carrot", "Tomato", "Chocolate", "Fork", "WaterBottle"]
+        },
+        {
+            "RoomName" : "Bedroom",
+            "LootTables"
+        }
+    ]
+}
