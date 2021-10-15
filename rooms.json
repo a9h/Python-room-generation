@@ -7,7 +7,20 @@
         },
         {
             "RoomName" : "Bedroom",
-            "LootTables"
+            "LootTables" : ["Hoodie", "Bat", "Torch"]
+        },
+        {
+            "RoomName" : "Bathroom",
+            "LootTables" : ["Medicine", "Syringe"]
+        },
+        {
+            "RoomName" : "Basement",
+            "LootTables" : ["Crowbar", "Torch"]
+        },
+        {
+            "RoomName" : "Garden",
+            "LootTables" : ["Branch", "Shovel"]
         }
+
     ]
 }
