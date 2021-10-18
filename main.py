@@ -12,9 +12,27 @@ class character:
         self.cHealth = currentHealth
         self.mHealth = maxHealth
     def giveHealth(self):
-        print(f"Your current health is {self.cHealth}")
+        print(f"Your current health is {self.cHealth} and your max health is {mHealth}")
         
 player = character(100,100)
+
+class regularenemy:
+  def __init__(self, health, strength):
+    self.health = health
+    self.strength = strength
+
+def CreateEnemy
+
+
+
+
+
+
+
+
+
+
+
 
 
 class HealthPotion():
@@ -164,14 +182,17 @@ def choices():
 
 
     elif choice.lower() == "use":
-        
-        print("You can use anything in your inventory " + "".join(inv))
-        useable = input("What would you like to use: ")
-        if ("\n" + useable) in inv:
-            use(useable)
+        if inv == False:
+          print("You dont have anything in  your inventory!")
+          choices()
         else:
-            print("You do not have that item")
-            choices()
+          print("You can use anything in your inventory " + "".join(inv))
+          useable = input("What would you like to use: ")
+          if ("\n" + useable) in inv:
+              use(useable)
+          else:
+              print("You do not have that item")
+              choices()
     elif choice.lower() == "health":
         player.giveHealth()
         choices()
