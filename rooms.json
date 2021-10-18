@@ -3,23 +3,23 @@
         
         {
             "RoomName" : "Kitchen",
-            "LootTables" : ["Knife", "Carrot", "Tomato", "Chocolate", "Fork", "WaterBottle"]
+            "LootTables" : ["knife", "carrot", "tomato", "chocolate", "fork", "waterBottle"]
         },
         {
             "RoomName" : "Bedroom",
-            "LootTables" : ["Hoodie", "Bat", "Torch"]
+            "LootTables" : ["hoodie", "bat", "torch"]
         },
         {
             "RoomName" : "Bathroom",
-            "LootTables" : ["Medicine", "Syringe"]
+            "LootTables" : ["medicine"]
         },
         {
             "RoomName" : "Basement",
-            "LootTables" : ["Crowbar", "Torch"]
+            "LootTables" : ["crowbar", "torch"]
         },
         {
             "RoomName" : "Garden",
-            "LootTables" : ["Branch", "Shovel"]
+            "LootTables" : ["branch", "shovel"]
         }
 
     ]
