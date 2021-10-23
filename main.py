@@ -12,7 +12,7 @@ class character:
         self.cHealth = currentHealth
         self.mHealth = maxHealth
     def giveHealth(self):
-        print(f"Your current health is {self.cHealth} and your max health is {mHealth}")
+        print(f"Your current health is {self.cHealth} and your max health is {self.mHealth}")
         
 player = character(100,100)
 
@@ -21,33 +21,17 @@ class regularenemy:
     self.health = health
     self.strength = strength
 
-def CreateEnemy
 
 
-
-
-
-
-
-
-
-
-
-
-
-class HealthPotion():
-    def act(self, player):
-        player.currentHealth += 20
+def medicine():
+    player.mHealth += 20
+    print(f"Max health increased to {player.mHealth}")
+    inv.remove("\nmedicine")
+    choices()
 
 
 def use(item):
-    if item.lower() == "medicine":
-        player.mHealth += 20
-        print(f"Max health increased to {player.mHealth}")
-        inv.remove("\n" + item)
-        choices()
-    elif item.lower() == "water":
-        player.currentHealth += 5
+    pass
 
 
 
