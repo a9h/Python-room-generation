@@ -3,15 +3,15 @@
         
         {
             "RoomName" : "Kitchen",
-            "LootTables" : ["knife", "carrot", "tomato", "chocolate", "fork", "waterBottle"]
+            "LootTables" : ["knife", "carrot", "meat","tomato", "chocolate", "fork", "waterbottle"]
         },
         {
             "RoomName" : "Bedroom",
-            "LootTables" : ["hoodie", "bat", "torch"]
+            "LootTables" : ["bat", "torch"]
         },
         {
             "RoomName" : "Bathroom",
-            "LootTables" : ["medicine"]
+            "LootTables" : ["medicine", "waterbottle", "bandage", "bandage", "bandage"]
         },
         {
             "RoomName" : "Basement",
