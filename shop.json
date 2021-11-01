@@ -1,0 +1,18 @@
+{
+  "food" : {
+    "steak" : 50,
+    "carrot" : 15,
+    "chocolate": 35,
+    "waterbottle": 35,
+    "cannedfood" : 40
+  },
+  "weapons": {
+    "sword" : 100,
+    "longsword" : 150
+
+
+  }
+
+
+
+}

@@ -3,6 +3,10 @@ import json
 import time
 import os
 haslooted = False
+firstTime = True
+food1 = ""
+food2 = ""
+weaponForSale = ""
 r = ""
 doors = 0
 useable = ""
@@ -18,7 +22,7 @@ class character:
         self.hunger = hunger
         self.thirst = thirst
     def giveHealth(self):
-        print(f"Your current health is {self.cHealth} and your max health is {self.mHealth}\nYour thirst is {self.thirst} and your hunger is {self.hunger}\nYou have {self.money} pounds to your name")
+        print(f"Your current health is {self.cHealth} and your max health is {self.mHealth}\nYour hunger is {self.hunger} and your thirst is {self.thirst}\nYou have £{self.money}")
     def damageTook(self, damage):
         self.cHealth -= damage
         if self.cHealth == 0 or self.cHealth < 0:
@@ -65,16 +69,19 @@ def use(item, encounter):
     MaxHealthItems = ["medicine"]
     CurrentHealthItems = ["bandage"]
     weapons = ["knife", "fork", "bat", "torch", "crowbar", "branch", "shovel"]
-    hungerItems = ["waterbottle", "carrot", "tomato", "chocolate"]
-    thirstItems = ["tomato", "carrot", "waterbottle", "chocolate"]
+    hungerItems = ["waterbottle", "carrot", "tomato", "chocolate", "cannedfood", "steak"]
+    thirstItems = ["tomato", "carrot", "waterbottle", "chocolate", "cannedfood", "steak"]
 
     with open ("stats.json", "r") as f:
         data = json.load(f)
 
         if item in weapons:
             print("You cant use a weapon when there is no enemies to use it on")
-            if encounter == True:
+            if encounter == "enemy":
                 encounterChoice()
+
+            elif encounter == "trader":
+                traderchoice()
             else:
                 choices()
 
@@ -87,8 +94,8 @@ def use(item, encounter):
             randomHunger = random.choice(findHunger[item])
             randomThirst = random.choice(findThirst[item])
 
-            hungerDifference = player.hunger - 100
-            thirstDifference = player.thirst - 100
+            hungerDifference = 100 - player.hunger
+            thirstDifference = 100 - player.thirst
 
             if randomThirst > thirstDifference or randomHunger > hungerDifference:
                 player.thirst += thirstDifference
@@ -100,18 +107,13 @@ def use(item, encounter):
             print(f"you used {item} and gained {randomHunger} hunger and {randomThirst} thirst")
             print(f"your current hunger and thirst levels are {player.hunger} and {player.thirst}")
 
-            if encounter == True:
+            if encounter == "enemy":
                 encounterChoice()
+
+            elif encounter == "trader":
+                traderchoice()
             else:
                 choices()
-
-
-
-
-
-
-
-
 
 
 
@@ -122,8 +124,11 @@ def use(item, encounter):
             player.mHealth += ToAdd
             inv.remove("\n"+item)
             print(f"Max health increased to {player.mHealth}")
-            if encounter == True:
+            if encounter == "enemy":
                 encounterChoice()
+
+            elif encounter == "trader":
+                traderchoice()
             else:
                 choices()
 
@@ -148,8 +153,11 @@ def use(item, encounter):
                 print(f"current health increased to {player.cHealth}")
 
             inv.remove("\n" + item)
-            if encounter == True:
+            if encounter == "enemy":
                 encounterChoice()
+
+            elif encounter == "trader":
+                traderchoice()
             else:
                 choices()
 
@@ -331,7 +339,9 @@ def choices():
 
 def encounterChoice():
 
-
+    if player.cHealth == 0 or 0 > player.cHealth:
+        print(f"You ran out of health and died - you had £{player.money}")
+        exit()
 
 
 
@@ -374,7 +384,7 @@ def encounterChoice():
           useable = input("What would you like to use: ")
 
           if ("\n" + useable) in inv:
-              use(useable, True)
+              use(useable, "enemy")
 
           else:
 
@@ -410,6 +420,10 @@ def encounterChoice():
             firstTime = True
             while enemyhealth > 0:
 
+                if player.cHealth == 0 or 0 > player.cHealth:
+                    print(f"You ran out of health and died - you had {player.money} pounds")
+                    exit()
+
                 if firstTime == True:
                     print("you have:" + "".join(weaponInv))
                     firstTime = False
@@ -431,7 +445,7 @@ def encounterChoice():
                         if enemyhealth == 0 or 0 > enemyhealth:
                             print(f"You did {damageToEnemy} to the enemy with your {weaponChoice} it now has 0 remaining")
                         else:
-                            print(f"You did {damageToEnemy} to the enemy with your {weaponChoice}, the enemy now has {enemyhealth} remaining")
+                            print(f"You did {damageToEnemy} to the enemy with your {weaponChoice}, the enemy now has {enemyhealth} health remaining")
 
                 elif ("\n" + weaponChoice) not in weaponInv:
                     healthLost = random.randint(5, 35)
@@ -475,7 +489,7 @@ def encounterChoice():
 
 
     else:
-        print("That is not a valid command!")
+        print("That is not a valid option!")
         encounterChoice()
 
 
@@ -494,50 +508,202 @@ def randomEncounter():
 
 
 
+def traderchoice():
+    global food1,food2,weaponForSale
+    global firstTime
+    with open("shop.json", "r") as f:
+        data = json.load(f)
+
+        if firstTime == True:
+
+            food1 = (random.choice(list(data["food"])))
+            food2 = (random.choice(list(data["food"])))
+
+            while food1 == food2:
+                food2 = (random.choice(list(data["food"])))
+
+            weaponChance = random.randint(1, 50)
+            if weaponChance > 25:
+                weaponForSale = (random.choice(list(data["weapons"])))
+
+
+
+            firstTime = False
+            traderchoice()
+
+
+    choice = input("> ")
+
+    if choice.lower() == "inv" or choice.lower() == "inventory":
+        print("You have: " + "".join(inv))
+        traderchoice()
+
+    elif choice.lower() == "use":
+
+        if inv == False:
+            print("You don't have anything in  your inventory!")
+            traderchoice()
+
+
+        else:
+          print("You can use anything in your inventory " + "".join(inv))
+          useable = input("What would you like to use: ")
+
+
+          if ("\n" + useable) in inv:
+              use(useable, "trader")
+
+
+
+
+
+          else:
+                print("You do not have that item")
+
+                traderchoice()
+
+
+
+
+    elif choice.lower() == "shop":
+
+
+
+
+
+            if firstTime == False:
+                if weaponForSale == "":
+                    print(f"The trader has:\n" + food1, "-", data["food"][food1])
+                    print(food2, "-", data["food"][food2])
+                else:
+                    print(f"The trader has:\n" + food1, "-", data["food"][food1])
+                    print(food2, "-", data["food"][food2])
+                    print(weaponForSale, "-", data["weapons"][weaponForSale])
+
+
+                traderchoice()
+
+    elif choice.lower() == "leave":
+        os.system("clear")
+        room()
+        generation(r)
+
+    elif choice.lower() == "buy":
+        food1Price = (data["food"][food1])
+        if weaponForSale == "":
+            print(f"The trader has:\n" + food1, "-", data["food"][food1])
+            print(food2, "-", data["food"][food2])
+        else:
+            print(f"The trader has:\n" + food1, "-", data["food"][food1])
+            print(food2, "-", data["food"][food2])
+            print(weaponForSale, "-", data["weapons"][weaponForSale])
+        print("You can buy anything listed as long as you have enough coins")
+        tobuy = input("> ")
+        if tobuy.lower() == food1:
+            confirm = input(f"This costs £{food1Price}are you sure? y/n\n> ")
+            if confirm == "y":
+                player.money -= food1Price
+                inv.append("\n" + food1)
+                print(f"You now have £{player.money} remaining")
+                traderchoice()
+
+
+            else:
+                traderchoice()
+
+
+
+
+
+
+
+
+
+
+
+def traderEncounter():
+    print("You have come across a wild trader, who is willing to sell items to you for a fee.")
+    print("The trader will also play games with you, and you can earn (or loose) some money.")
+    print("Use 'shop' to see what the trader has for sale, or use 'games' to gamble some money")
+    traderchoice()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 def generation(room):
+    global firstTime
+    firstTime = True
     hungerItems = ["waterbottle", "carrot", "tomato", "chocolate"]
     foodinv = []
 
 
     removeHunger = random.randint(1,100)
     if removeHunger > 50:
-        hungerRemoved = random.randint(1,15)
-        thirstRemoved = random.randint(1,15)
+        hungerRemoved = random.randint(1,10)
+        thirstRemoved = random.randint(1,10)
 
         player.thirst -= thirstRemoved
         player.hunger -= hungerRemoved
 
-    if player.hunger == 0 or player.hunger < 0 or player.thirst == 0 or player.thirst < 0:
+    elif player.hunger == 0 or player.hunger < 0 or player.thirst == 0 or player.thirst < 0:
         print("You ran out of hunger/thirst and died...")
         print("Game over!")
 
 
-    if player.hunger < 20 or player.thirst < 20:
+    elif player.hunger < 20 or player.thirst < 20:
         print("Your hunger and thirst levels are low. You should probably eat something")
 
 
 
     global previous
-
-    encounterChoice = random.randint(1,100)
+    traderRarity = random.randint(1,170)
+    encounterChoice = random.randint(1,130)
     if 25 > encounterChoice and previous == False:
         encounter = True
     else:
         encounter = False
         previous = False
+    if 20 > traderRarity:
+        traderEnc = True
+    else:
+        traderEnc = False
+
+
 
 
 
     isTrue = True
 
-    if encounter == True:
+
+
+
+
+    if encounter == True or encounter == True and traderEnc == True:
         randomEncounter()
+    elif traderEnc == True and encounter == False:
+        traderEncounter()
 
 
-    elif isTrue == True and encounter == False:
+
+
+    elif isTrue == True and encounter == False and traderEnc == False:
         os.system("clear")
         realname = (r["RoomName"])
 
