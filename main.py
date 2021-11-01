@@ -106,6 +106,7 @@ def use(item, encounter):
                 player.thirst += randomThirst
             print(f"you used {item} and gained {randomHunger} hunger and {randomThirst} thirst")
             print(f"your current hunger and thirst levels are {player.hunger} and {player.thirst}")
+            inv.remove(item)
 
             if encounter == "enemy":
                 encounterChoice()
@@ -647,26 +648,6 @@ def traderEncounter():
     print("The trader will also play games with you, and you can earn (or loose) some money.")
     print("Use 'shop' to see what the trader has for sale, or use 'games' to gamble some money")
     traderchoice()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 def generation(room):
     global firstTime
