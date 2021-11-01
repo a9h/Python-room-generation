@@ -466,8 +466,9 @@ def encounterChoice():
 
 
 
-
-            print("You killed the enemy and ran to another room!")
+            coinsLooted = random.randint(1,50)
+            print(f"You killed the enemy and ran to another room, and looted £{coinsLooted}")
+            player.money += coinsLooted
             time.sleep(2)
             room()
             generation(r)
@@ -590,6 +591,7 @@ def traderchoice():
 
     elif choice.lower() == "buy":
         food1Price = (data["food"][food1])
+        food2Price = (data["food"][food2])
         if weaponForSale == "":
             print(f"The trader has:\n" + food1, "-", data["food"][food1])
             print(food2, "-", data["food"][food2])
@@ -597,6 +599,7 @@ def traderchoice():
             print(f"The trader has:\n" + food1, "-", data["food"][food1])
             print(food2, "-", data["food"][food2])
             print(weaponForSale, "-", data["weapons"][weaponForSale])
+
         print("You can buy anything listed as long as you have enough coins")
         tobuy = input("> ")
         if tobuy.lower() == food1:
@@ -608,8 +611,26 @@ def traderchoice():
                 traderchoice()
 
 
+        if tobuy.lower() == food2:
+            confirm = input(f"This costs £{food2Price} are you sure? y/n\n> ")
+            if confirm == "y":
+              if player.money > food2Price or player.money == food2Price:
+                  player.money -= food2Price
+                  inv.append("\n" + food2)
+                  print(f"You now have £{player.money} remaining")
+                  traderchoice()
+              else:
+                print("You do not have enough money for this item.")
+                traderchoice()
+
+                
+
+
             else:
                 traderchoice()
+
+        else:
+          traderchoice()
 
 
 
