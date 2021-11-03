@@ -593,6 +593,7 @@ def traderchoice():
     elif choice.lower() == "buy":
         food1Price = (data["food"][food1])
         food2Price = (data["food"][food2])
+        weaponPrice = (data["weapons"][weaponForSale])
         if weaponForSale == "":
             print(f"The trader has:\n" + food1, "-", data["food"][food1])
             print(food2, "-", data["food"][food2])
@@ -612,8 +613,21 @@ def traderchoice():
                 traderchoice()
 
 
-        if tobuy.lower() == food2:
+        elif tobuy.lower() == food2:
             confirm = input(f"This costs £{food2Price} are you sure? y/n\n> ")
+            if confirm == "y":
+              if player.money > food2Price or player.money == food2Price:
+                  player.money -= food2Price
+                  inv.append("\n" + food2)
+                  print(f"You now have £{player.money} remaining")
+                  traderchoice()
+              else:
+                print("You do not have enough money for this item.")
+                traderchoice()
+
+                
+        elif tobuy.lower() == weaponForSale:
+            confirm = input(f"This costs £{weaponPrice} are you sure? y/n\n> ")
             if confirm == "y":
               if player.money > food2Price or player.money == food2Price:
                   player.money -= food2Price
