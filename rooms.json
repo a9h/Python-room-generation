@@ -7,19 +7,19 @@
         },
         {
             "RoomName" : "Bedroom",
-            "LootTables" : ["bat", "torch"]
+            "LootTables" : ["bat", "chocolate","waterbottle"]
         },
         {
             "RoomName" : "Bathroom",
-            "LootTables" : ["medicine", "waterbottle", "bandage", "bandage", "bandage"]
+            "LootTables" : ["medicine", "waterbottle", "bandage", "bandage", "bandage","medkit","medkit"]
         },
         {
             "RoomName" : "Basement",
-            "LootTables" : ["crowbar", "torch"]
+            "LootTables" : ["crowbar", "torch","waterbottle"]
         },
         {
             "RoomName" : "Garden",
-            "LootTables" : ["branch", "shovel"]
+            "LootTables" : ["branch", "shovel","mushroom","mushroom"]
         }
 
     ]

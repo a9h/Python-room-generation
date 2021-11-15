@@ -6,7 +6,9 @@
     "waterbottle": 35,
     "cannedfood" : 40,
     "bandage" : 30,
-    "medicine":40
+    "medicine":40,
+    "medkit": 60,
+    "pills": 70
 
   },
   "weapons": {
