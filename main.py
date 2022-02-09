@@ -18,12 +18,14 @@ inv = ["\nmedicine"]
 
 
 class character:
-    def __init__(self, currentHealth, maxHealth, money, hunger, thirst):
+    def __init__(self, currentHealth, maxHealth, money, hunger, thirst, armour):
         self.cHealth = currentHealth
         self.mHealth = maxHealth
         self.money = money
         self.hunger = hunger
         self.thirst = thirst
+        self.armour = armour
+
 
     def giveHealth(self):
         print(
@@ -70,7 +72,6 @@ def use(item, encounter):
 
 
 
-
         elif item in data["thirst"] and item in data["hunger"]:
             findThirst = data["thirst"]
             findHunger = data["hunger"]
@@ -82,9 +83,17 @@ def use(item, encounter):
 
             if randomThirst > thirstDifference:
                 player.thirst += thirstDifference
+                if player.thirst > 100:
+                    player.thirst = 100
+                else:
+                    pass
 
             if randomHunger > hungerDifference:
                 player.hunger += hungerDifference
+                if player.hunger > 100:
+                    player.hunger = 100
+                else:
+                    pass
 
 
             else:
