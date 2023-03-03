@@ -2,9 +2,24 @@ import random
 import json
 import time
 import os
+import fileinput
 
-haslooted = False
-firstTime = True
+
+from shop import *
+from enemy import *
+
+
+
+
+
+folderpath = "/Users/woodyrobson/GitHub/Python-room-generation/Json"
+file_list = [a for a in os.listdir(folderpath) if a.endswith(".json")]
+# This will return all the files which are in .json format
+
+get_all_files = fileinput.input(file_list)
+
+
+
 food1 = ""
 food2 = ""
 weaponForSale = ""
@@ -14,17 +29,24 @@ useable = ""
 enemy = ""
 firstEnemy = True
 previous = True
-inv = ["\nmedicine"]
+
 
 
 class character:
-    def __init__(self, currentHealth, maxHealth, money, hunger, thirst, armour):
+    def __init__(self, currentHealth, maxHealth, money, hunger, thirst, haslooted, inv):
         self.cHealth = currentHealth
+
         self.mHealth = maxHealth
+
         self.money = money
+
         self.hunger = hunger
+
         self.thirst = thirst
-        self.armour = armour
+
+        self.haslooted = haslooted
+
+        self.inv = inv
 
 
     def giveHealth(self):
@@ -49,14 +71,14 @@ knifeWeapon = weapon(150)
 forkWeapon = weapon(40)
 batWeapon = weapon(60)
 
-player = character(100, 100, 50, 100, 100)
+player = character(100, 100, 50, 100, 100, False, ["\nmedicine"])
 
 
 
 
 
 def use(item, encounter):
-    with open("stats.json") as f, open("weapons.json") as b:
+    with open("Json/stats.json") as f, open("Json/weapons.json") as b:
         data = json.load(f)
         wdata = json.load(b)
 
@@ -101,7 +123,7 @@ def use(item, encounter):
                 player.thirst += randomThirst
             print(f"you used {item} and gained {randomHunger} hunger and {randomThirst} thirst")
             print(f"your current hunger and thirst levels are {player.hunger} and {player.thirst}")
-            inv.remove("\n" + item)
+            player.inv.remove("\n" + item)
 
             if encounter == "enemy":
                 encounterChoice()
@@ -118,7 +140,7 @@ def use(item, encounter):
             FindOption = data["maxhealth"]
             ToAdd = random.choice(FindOption[item])
             player.mHealth += ToAdd
-            inv.remove("\n" + item)
+            player.inv.remove("\n" + item)
             print(f"Max health increased to {player.mHealth}")
             if encounter == "enemy":
                 encounterChoice()
@@ -144,7 +166,7 @@ def use(item, encounter):
                 player.cHealth += ToAdd2
                 print(f"current health increased to {player.cHealth}")
 
-            inv.remove("\n" + item)
+            player.inv.remove("\n" + item)
             if encounter == "enemy":
                 encounterChoice()
 
@@ -182,18 +204,17 @@ def startscreen():
 
 # "Create" current room
 def room():
-    global haslooted
     global doors
     global r
-    with open("rooms.json") as f:
-        haslooted = False
+    with open("Json/rooms.json") as f:
+        player.haslooted = False
         data = json.load(f)
         r = random.choice(data["rooms"])
         doors = (random.randint(1, 3))
 
 
 def loot(r):
-    global haslooted
+
     global doors
 
     if doors == 1:
@@ -209,16 +230,16 @@ def loot(r):
     spots = ["You peaked in a cupboard", "You looked in a draw", "You opened a cabinet"]
     gathered = (random.choice(r["LootTables"]))
 
-    if haslooted == False:
+    if player.haslooted == False:
         if lucky < 33:
-            haslooted = True
+            player.haslooted = True
             print(f"{random.choice(spots)} and found {gathered}!")
 
-            inv.append(f"\n{gathered}")
+            player.inv.append(f"\n{gathered}")
             choices()
 
         else:
-            haslooted = True
+            player.haslooted = True
             print("Looks like you didn't find anything, unlucky")
             choices()
     else:
@@ -241,8 +262,8 @@ def choices():
     elif choice.lower() == "drop":
         dropped = input("What item would you like to drop: ")
 
-        if dropped in inv:
-            inv.remove("\n" + dropped)
+        if dropped in player.inv:
+            player.inv.remove("\n" + dropped)
         else:
             print("You do not have that item...")
             choices()
@@ -288,21 +309,21 @@ def choices():
 
     elif choice.lower() == "inventory" or choice.lower() == "inv":
 
-        print("You have: " + "".join(inv))
+        print("You have: " + "".join(player.inv))
         choices()
 
 
     elif choice.lower() == "use":
-        if inv == False:
+        if player.inv == False:
             print("You dont have anything in  your inventory!")
             choices()
 
         else:
 
-            print("You can use anything in your inventory " + "".join(inv))
+            print("You can use anything in your inventory " + "".join(player.inv))
             useable = input("What would you like to use: ")
 
-            if ("\n" + useable) in inv:
+            if ("\n" + useable) in player.inv:
                 use(useable, False)
 
             else:
@@ -409,16 +430,16 @@ def encounterChoice():
 
     elif choice.lower() == "use":
 
-        if inv == False:
+        if player.inv == False:
             print("You don't have anything in  your inventory!")
             encounterChoice()
 
         else:
 
-            print("You can use anything in your inventory " + "".join(inv))
+            print("You can use anything in your inventory " + "".join(player.inv))
             useable = input("What would you like to use: ")
 
-            if ("\n" + useable) in inv:
+            if ("\n" + useable) in player.inv:
                 use(useable, "enemy")
 
             else:
@@ -430,8 +451,8 @@ def encounterChoice():
     elif choice.lower() == "drop":
         dropped = input("What item would you like to drop: ")
 
-        if dropped in inv:
-            inv.remove("\n" + dropped)
+        if dropped in player.inv:
+            player.inv.remove("\n" + dropped)
         else:
             print("You do not have that item...")
             encounterChoice()
@@ -439,7 +460,7 @@ def encounterChoice():
 
     elif choice.lower() == "fight":
         weaponInv = []
-        for x in inv:
+        for x in player.inv:
 
             weaponList = ["\nknife", "\nfork", "\nbat", "\ntorch", "\ncrowbar", "\nbranch", "\nshovel"]
             if x in weaponList:
@@ -493,7 +514,7 @@ def encounterChoice():
                         didScare = random.randint(1, 100)
                         if didScare < 25:
                             print("You light your torch and scare off the enemy!")
-                            inv.remove("\ntorch")
+                            player.inv.remove("\ntorch")
                             room()
                             generation(r)
                         else:
@@ -504,7 +525,7 @@ def encounterChoice():
 
 
 
-                        with open("weapons.json", "r") as f:
+                        with open("Json/weapons.json", "r") as f:
                             data = json.load(f)
 
                             Find = data["weapons"]
@@ -555,7 +576,7 @@ def encounterChoice():
 
 
     elif choice == "inv" or choice == "inventory":
-        print("You have: " + "".join(inv))
+        print("You have: " + "".join(player.inv))
         encounterChoice()
 
 
@@ -582,7 +603,7 @@ def randomEncounter():
 def traderchoice():
     global food1, food2, weaponForSale
     global firstTime
-    with open("shop.json", "r") as f:
+    with open("Json/shop.json", "r") as f:
         data = json.load(f)
 
         if firstTime == True:
@@ -603,15 +624,15 @@ def traderchoice():
     choice = input("> ")
 
     if choice.lower() == "inv" or choice.lower() == "inventory":
-        print("You have: " + "".join(inv))
+        print("You have: " + "".join(player.inv))
         traderchoice()
 
 
     elif choice.lower() == "drop":
         dropped = input("What item would you like to drop: ")
 
-        if dropped in inv:
-            inv.remove("\n" + dropped)
+        if dropped in player.inv:
+            player.inv.remove("\n" + dropped)
         else:
             print("You do not have that item...")
             traderchoice()
@@ -619,16 +640,16 @@ def traderchoice():
 
     elif choice.lower() == "use":
 
-        if inv == False:
+        if player.inv == False:
             print("You don't have anything in  your inventory!")
             traderchoice()
 
 
         else:
-            print("You can use anything in your inventory " + "".join(inv))
+            print("You can use anything in your inventory " + "".join(player.inv))
             useable = input("What would you like to use: ")
 
-            if ("\n" + useable) in inv:
+            if ("\n" + useable) in player.inv:
                 use(useable, "trader")
 
 
@@ -690,7 +711,7 @@ def traderchoice():
             if confirm == "y":
                 if player.money > food1Price or player.money == food1Price:
                     player.money -= food1Price
-                    inv.append("\n" + food1)
+                    player.inv.append("\n" + food1)
                     print(f"You now have £{player.money} remaining")
                     traderchoice()
                 else:
@@ -702,7 +723,7 @@ def traderchoice():
             if confirm == "y":
                 if player.money > food2Price or player.money == food2Price:
                     player.money -= food2Price
-                    inv.append("\n" + food2)
+                    player.inv.append("\n" + food2)
                     print(f"You now have £{player.money} remaining")
                     traderchoice()
                 else:
@@ -715,7 +736,7 @@ def traderchoice():
             if confirm == "y":
                 if player.money > weaponPrice or player.money == weaponPrice:
                     player.money -= weaponPrice
-                    inv.append("\n" + weaponForSale)
+                    player.inv.append("\n" + weaponForSale)
                     print(f"You now have £{player.money} remaining")
                     traderchoice()
                 else:
