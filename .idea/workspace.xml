@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5fc71543-c16f-40e6-a4f6-1d5df8365fe2" name="Default Changelist" comment="semi complete shop system - need to fix up `use` system to be fully modular. game is in a working state! --NEED TO ADD HELP SCREEN!--">
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rooms.json" beforeDir="false" afterPath="$PROJECT_DIR$/rooms.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shop.json" beforeDir="false" afterPath="$PROJECT_DIR$/shop.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stats.json" beforeDir="false" afterPath="$PROJECT_DIR$/stats.json" afterDir="false" />
+    <list default="true" id="5fc71543-c16f-40e6-a4f6-1d5df8365fe2" name="Default Changelist" comment="To do&#10;-help screen&#10;-armour&#10;-make use system fully modular&#10;-games with trader">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +37,29 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
+  <component name="RunManager">
+    <configuration name="Unnamed" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="/usr/local/bin/python3" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -63,7 +83,14 @@
       <option name="project" value="LOCAL" />
       <updated>1635732757699</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="To do&#10;-help screen&#10;-armour&#10;-make use system fully modular&#10;-games with trader">
+      <created>1644366878418</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1644366878418</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -81,6 +108,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Enemies added, hunger / thirst added, health completed" />
     <MESSAGE value="semi complete shop system - need to fix up `use` system to be fully modular. game is in a working state! --NEED TO ADD HELP SCREEN!--" />
-    <option name="LAST_COMMIT_MESSAGE" value="semi complete shop system - need to fix up `use` system to be fully modular. game is in a working state! --NEED TO ADD HELP SCREEN!--" />
+    <MESSAGE value="To do&#10;-help screen&#10;-armour&#10;-make use system fully modular&#10;-games with trader" />
+    <option name="LAST_COMMIT_MESSAGE" value="To do&#10;-help screen&#10;-armour&#10;-make use system fully modular&#10;-games with trader" />
   </component>
 </project>
