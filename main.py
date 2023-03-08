@@ -5,10 +5,7 @@ import os
 import fileinput
 
 
-from shop import *
-from enemy import *
-
-
+from use import use
 
 
 
@@ -23,12 +20,26 @@ get_all_files = fileinput.input(file_list)
 food1 = ""
 food2 = ""
 weaponForSale = ""
-r = ""
-doors = 0
-useable = ""
+
+
+
+
 enemy = ""
 firstEnemy = True
 previous = True
+
+
+
+
+
+
+class generation:
+    def __init__(self,doors,room):
+        self.doors = doors
+        self.room = room
+
+
+
 
 
 
@@ -72,108 +83,9 @@ forkWeapon = weapon(40)
 batWeapon = weapon(60)
 
 player = character(100, 100, 50, 100, 100, False, ["\nmedicine"])
+generator = generation(0, "")
 
 
-
-
-
-def use(item, encounter):
-    with open("Json/stats.json") as f, open("Json/weapons.json") as b:
-        data = json.load(f)
-        wdata = json.load(b)
-
-        if item in wdata["weapons"]:
-            print("You cant use a weapon when there is no enemies to use it on")
-            if encounter == "enemy":
-                encounterChoice()
-
-            elif encounter == "trader":
-                traderchoice()
-            else:
-                choices()
-
-
-
-        elif item in data["thirst"] and item in data["hunger"]:
-            findThirst = data["thirst"]
-            findHunger = data["hunger"]
-            randomHunger = random.choice(findHunger[item])
-            randomThirst = random.choice(findThirst[item])
-
-            hungerDifference = 100 - player.hunger
-            thirstDifference = 100 - player.thirst
-
-            if randomThirst > thirstDifference:
-                player.thirst += thirstDifference
-                if player.thirst > 100:
-                    player.thirst = 100
-                else:
-                    pass
-
-            if randomHunger > hungerDifference:
-                player.hunger += hungerDifference
-                if player.hunger > 100:
-                    player.hunger = 100
-                else:
-                    pass
-
-
-            else:
-                player.hunger += randomHunger
-                player.thirst += randomThirst
-            print(f"you used {item} and gained {randomHunger} hunger and {randomThirst} thirst")
-            print(f"your current hunger and thirst levels are {player.hunger} and {player.thirst}")
-            player.inv.remove("\n" + item)
-
-            if encounter == "enemy":
-                encounterChoice()
-
-            elif encounter == "trader":
-                traderchoice()
-            else:
-                choices()
-
-
-
-
-        elif item in data["maxhealth"]:
-            FindOption = data["maxhealth"]
-            ToAdd = random.choice(FindOption[item])
-            player.mHealth += ToAdd
-            player.inv.remove("\n" + item)
-            print(f"Max health increased to {player.mHealth}")
-            if encounter == "enemy":
-                encounterChoice()
-
-            elif encounter == "trader":
-                traderchoice()
-            else:
-                choices()
-
-        elif item in data["currenthealth"]:
-            FindOption2 = data["currenthealth"]
-
-            ToAdd2 = random.choice(FindOption2[item])
-
-            difference = player.mHealth - player.cHealth
-
-            if ToAdd2 > difference:
-                player.cHealth += difference
-
-                print(f"current health increased to {player.cHealth}")
-
-            else:
-                player.cHealth += ToAdd2
-                print(f"current health increased to {player.cHealth}")
-
-            player.inv.remove("\n" + item)
-            if encounter == "enemy":
-                encounterChoice()
-
-            elif encounter == "trader":
-                traderchoice()
-            else:
-                choices()
 
 
 
@@ -194,7 +106,7 @@ def startchoice():
         startchoice()
     elif choice.lower() == "play":
         os.system("clear")
-        generation(r)
+        generation()
 
 
 def startscreen():
@@ -204,31 +116,31 @@ def startscreen():
 
 # "Create" current room
 def room():
-    global doors
-    global r
+    
+
     with open("Json/rooms.json") as f:
         player.haslooted = False
         data = json.load(f)
-        r = random.choice(data["rooms"])
-        doors = (random.randint(1, 3))
+        generator.room = random.choice(data["rooms"])
+        generator.doors = random.randint(1, 3)
 
 
-def loot(r):
+def loot():
 
-    global doors
+    
 
-    if doors == 1:
+    if generator.doors == 1:
         lucky = random.randint(1, 101)
 
 
-    elif doors == 2:
+    elif generator.doors == 2:
         lucky = random.randint(1, 76)
 
-    elif doors == 3:
+    elif generator.doors == 3:
         lucky = random.randint(1, 51)
 
     spots = ["You peaked in a cupboard", "You looked in a draw", "You opened a cabinet"]
-    gathered = (random.choice(r["LootTables"]))
+    gathered = (random.choice(generator.room["LootTables"]))
 
     if player.haslooted == False:
         if lucky < 33:
@@ -252,12 +164,12 @@ def loot(r):
 
 
 def choices():
-    global useable
-    global doors
+
+    
     choice = input("> ")
 
     if choice.lower() == "loot":
-        loot(r)
+        loot()
 
     elif choice.lower() == "drop":
         dropped = input("What item would you like to drop: ")
@@ -281,14 +193,14 @@ def choices():
     elif choice.lower() == "1":
         os.system("clear")
         room()
-        generation(r)
+        generation()
 
 
     elif choice.lower() == "2":
-        if doors > 1:
+        if generator.doors > 1:
             os.system("clear")
             room()
-            generation(r)
+            generation()
 
 
         else:
@@ -297,10 +209,10 @@ def choices():
 
 
     elif choice.lower() == "3":
-        if doors > 2:
+        if generator.doors > 2:
             os.system("clear")
             room()
-            generation(r)
+            generation()
 
         else:
             print("You do not have 3 doors")
@@ -324,7 +236,7 @@ def choices():
             useable = input("What would you like to use: ")
 
             if ("\n" + useable) in player.inv:
-                use(useable, False)
+                use(useable, False,player=player)
 
             else:
 
@@ -424,7 +336,7 @@ def encounterChoice():
         print("You ran and escaped to another room!")
         time.sleep(1)
         previous = True
-        generation(r)
+        generation()
 
 
 
@@ -516,7 +428,7 @@ def encounterChoice():
                             print("You light your torch and scare off the enemy!")
                             player.inv.remove("\ntorch")
                             room()
-                            generation(r)
+                            generation()
                         else:
                             print("The enemy did not care about your torch")
 
@@ -570,7 +482,7 @@ def encounterChoice():
             player.money += coinsLooted
             time.sleep(2)
             room()
-            generation(r)
+            generation()
             previous = True
 
 
@@ -650,7 +562,7 @@ def traderchoice():
             useable = input("What would you like to use: ")
 
             if ("\n" + useable) in player.inv:
-                use(useable, "trader")
+                use(useable, "trader", player=player)
 
 
 
@@ -683,7 +595,7 @@ def traderchoice():
     elif choice.lower() == "leave":
         os.system("clear")
         room()
-        generation(r)
+        generation()
 
     elif choice.lower() == "buy":
         food1Price = (data["food"][food1])
@@ -761,7 +673,7 @@ def traderEncounter():
     traderchoice()
 
 
-def generation(room):
+def generation():
     global firstTime
     global firstEnemy
     global enemy
@@ -813,9 +725,9 @@ def generation(room):
 
     elif isTrue == True and encounter == False and traderEnc == False:
         os.system("clear")
-        realname = (r["RoomName"])
+        realname = (generator.room["RoomName"])
 
-        print(f"you find yourself in a {realname} with {doors} door(s)")
+        print(f"you find yourself in a {realname} with {generator.doors} door(s)")
         choices()
 
 
