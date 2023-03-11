@@ -9,20 +9,13 @@ file_list = [a for a in os.listdir(folderpath) if a.endswith(".json")]
 
 
 
-def use(item, encounter, player):
+def use(item, encounter, player,choicess):
     with open("Json/stats.json") as f, open("Json/weapons.json") as b:
         data = json.load(f)
         wdata = json.load(b)
 
         if item in wdata["weapons"]:
             print("You cant use a weapon when there is no enemies to use it on")
-            if encounter == "enemy":
-                encounterChoice()
-
-            elif encounter == "trader":
-                traderchoice()
-            else:
-                choices()
 
 
 
@@ -57,13 +50,7 @@ def use(item, encounter, player):
             print(f"your current hunger and thirst levels are {player.hunger} and {player.thirst}")
             player.inv.remove("\n" + item)
 
-            if encounter == "enemy":
-                encounterChoice()
 
-            elif encounter == "trader":
-                traderchoice()
-            else:
-                choices()
 
 
 
@@ -74,13 +61,7 @@ def use(item, encounter, player):
             player.mHealth += ToAdd
             player.inv.remove("\n" + item)
             print(f"Max health increased to {player.mHealth}")
-            if encounter == "enemy":
-                encounterChoice()
 
-            elif encounter == "trader":
-                traderchoice()
-            else:
-                choices()
 
         elif item in data["currenthealth"]:
             FindOption2 = data["currenthealth"]
@@ -99,10 +80,11 @@ def use(item, encounter, player):
                 print(f"current health increased to {player.cHealth}")
 
             player.inv.remove("\n" + item)
-            if encounter == "enemy":
+
+        if encounter == "enemy":
                 encounterChoice()
 
-            elif encounter == "trader":
-                traderchoice()
-            else:
-                choices()
+        elif encounter == "trader":
+            traderchoice()
+        else:
+            choices()

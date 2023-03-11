@@ -236,7 +236,7 @@ def choices():
             useable = input("What would you like to use: ")
 
             if ("\n" + useable) in player.inv:
-                use(useable, False,player=player)
+                use(useable, False,player=player,choicess=choices())
 
             else:
 
