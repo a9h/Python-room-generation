@@ -4,12 +4,12 @@ import time
 import os
 import fileinput
 
-folderpath = "/Users/woodyrobson/GitHub/Python-room-generation/Json"
+folderpath = "C:/Users/woody/Documents/GitHub/Python-room-generation/Json"
 file_list = [a for a in os.listdir(folderpath) if a.endswith(".json")]
 
 
 
-def use(item, encounter, player,choicess):
+def use(item, encounter, player,):
     with open("Json/stats.json") as f, open("Json/weapons.json") as b:
         data = json.load(f)
         wdata = json.load(b)
@@ -81,10 +81,4 @@ def use(item, encounter, player,choicess):
 
             player.inv.remove("\n" + item)
 
-        if encounter == "enemy":
-                encounterChoice()
 
-        elif encounter == "trader":
-            traderchoice()
-        else:
-            choices()
