@@ -2,20 +2,14 @@ import random
 import json
 import time
 import os
-import fileinput
+
 
 
 from use import use
 from shop import buy
 from fight import fight
 from games import games
-"""
-folderpath = "C:/Users/woody/Documents/GitHub/Python-room-generation/Json"
-file_list = [a for a in os.listdir(folderpath) if a.endswith(".json")]
-# This will return all the files which are in .json format
 
-get_all_files = fileinput.input(file_list)
-"""
 
 
 food1 = ""

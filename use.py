@@ -4,8 +4,6 @@ import time
 import os
 import fileinput
 
-folderpath = "C:/Users/woody/Documents/GitHub/Python-room-generation/Json"
-file_list = [a for a in os.listdir(folderpath) if a.endswith(".json")]
 
 
 
