@@ -1,3 +1,10 @@
 
 .idea/workspace.xml
 .idea/inspectionProfiles/profiles_settings.xml
+*.pyc
+__pycache__/main.cpython-310.pyc
+__pycache__/shop.cpython-310.pyc
+__pycache__/use.cpython-310.pyc
+__pycache__/use.cpython-310.pyc
+__pycache__/shop.cpython-310.pyc
+__pycache__/main.cpython-310.pyc

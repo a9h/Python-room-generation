@@ -36,12 +36,33 @@ def games(player):
                 player.money += bet
                 print(f"Your new balance is {player.money}")
                 print("play again, or use leave to return to trader menu")
+                choice1 = input("> ")
+
+                match choice1:
+
+                    case "play", "again":
+                        games(player=player)
+                    case "return":
+                        pass
+
+                
+
+
             
             else:
                 print(f"You lost! {bet} has been deducted from your balance")
                 player.money -= bet
                 print(f"Your new balance is {player.money}")
                 print("play again, or use leave to return to trader menu")
+
+                choice2 = input("> ")
+                
+                match choice2:
+
+                    case "play", "again":
+                        games(player=player)
+                    case "return":
+                        pass
         
 
         case "leave":

@@ -3,13 +3,11 @@ import json
 import time
 import os
 
+from helperFuncs import sortinv
 
-
-from use import use
 from shop import buy
 from fight import fight
 from games import games
-
 
 
 food1 = ""
@@ -17,29 +15,19 @@ food2 = ""
 weaponForSale = ""
 
 
-
-
 enemy = ""
 firstEnemy = True
 previous = True
 
 
-
-
-
-
 class generation:
-    def __init__(self,doors,room):
+    def __init__(self, doors, room):
         self.doors = doors
         self.room = room
 
 
-
-            
-
-
 class character:
-    def __init__(self, currentHealth, maxHealth, money, hunger, thirst, haslooted, inv):
+    def __init__(self, currentHealth, maxHealth, money, hunger, thirst, haslooted, inv, printinv):
         self.cHealth = currentHealth
 
         self.mHealth = maxHealth
@@ -54,6 +42,7 @@ class character:
 
         self.inv = inv
 
+        self.printinv = printinv
 
     def giveHealth(self):
         print(
@@ -65,7 +54,8 @@ class character:
             print("Game over! you died")
             exit()
         else:
-            print(f"You lost {damage} health, and now have {self.cHealth} left")
+            print(
+                f"You lost {damage} health, and now have {self.cHealth} left")
 
 
 class weapon:
@@ -77,17 +67,8 @@ knifeWeapon = weapon(150)
 forkWeapon = weapon(40)
 batWeapon = weapon(60)
 
-player = character(100, 100, 50, 100, 100, False, ["\nmedicine"])
+player = character(100, 100, 50, 100, 100, False, ["\nmedicine", "\nmedicine"], [""])
 generator = generation(0, "")
-
-
-
-
-
-
-
-
-
 
 
 def startchoice():
@@ -100,7 +81,7 @@ def startchoice():
         print("3 - goes through door 2 (If you have 3 doors available) ")
         startchoice()
     elif choice.lower() == "play":
-        os.system("cls")
+        os.system("clear")
         generation()
 
 
@@ -111,7 +92,6 @@ def startscreen():
 
 # "Create" current room
 def room():
-    
 
     with open("Json/rooms.json") as f:
         player.haslooted = False
@@ -119,14 +99,15 @@ def room():
         generator.room = random.choice(data["rooms"])
         generator.doors = random.randint(1, 3)
 
+        sortinv(player=player)
+        print("You have: " + "".join(player.printinv))
+
+
 
 def loot():
 
-    
-
     if generator.doors == 1:
         lucky = random.randint(1, 101)
-
 
     elif generator.doors == 2:
         lucky = random.randint(1, 76)
@@ -134,7 +115,8 @@ def loot():
     elif generator.doors == 3:
         lucky = random.randint(1, 51)
 
-    spots = ["You peaked in a cupboard", "You looked in a draw", "You opened a cabinet"]
+    spots = ["You peaked in a cupboard",
+             "You looked in a draw", "You opened a cabinet"]
     gathered = (random.choice(generator.room["LootTables"]))
 
     if player.haslooted == False:
@@ -160,11 +142,9 @@ def loot():
 
 def choices():
 
-    
     choice = input("> ")
     choice = choice.lower()
     match choice:
-
 
         case "loot":
             loot()
@@ -178,7 +158,6 @@ def choices():
                 print("You do not have that item...")
                 choices()
 
-
         case "help":
             print("help - shows this menu")
             print("loot - look around your room for anything useful")
@@ -187,28 +166,24 @@ def choices():
             print("3 - goes through door 2 (If you have 3 doors available) ")
             choices()
 
-
         case "1":
-            os.system("cls")
+            os.system("clear")
             room()
             generation()
 
-
         case "2":
             if generator.doors > 1:
-                os.system("cls")
+                os.system("clear")
                 room()
                 generation()
-
 
             else:
                 print("You do not have 2 doors")
                 choices()
 
-
         case "3":
             if generator.doors > 2:
-                os.system("cls")
+                os.system("clear")
                 room()
                 generation()
 
@@ -216,12 +191,10 @@ def choices():
                 print("You do not have 3 doors")
                 choices()
 
-
         case "inv":
 
-            print("You have: " + "".join(player.inv))
+            print("You have: " + "".join(player.printinv))
             choices()
-
 
         case "use":
             if player.inv == False:
@@ -230,7 +203,8 @@ def choices():
 
             else:
 
-                print("You can use anything in your inventory " + "".join(player.inv))
+                print("You can use anything in your inventory " +
+                      "".join(player.inv))
                 useable = input("What would you like to use: ")
 
                 if ("\n" + useable) in player.inv:
@@ -242,13 +216,9 @@ def choices():
                     print("You do not have that item")
                     choices()
 
-
-
         case "health":
             player.giveHealth()
             choices()
-
-
 
         case _:
             print("that is not a valid option")
@@ -259,16 +229,13 @@ def encounterChoice():
     global enemy
     global firstEnemy
 
-    
-
-    
     if firstEnemy == True:
-        enemyChance = random.randint(1,200)
+        enemyChance = random.randint(1, 200)
 
         if enemyChance < 25:
             enemy = "hard"
             enemyhealth = 250
-            
+
         elif enemyChance > 25 and enemyChance < 125:
             enemy = "medium"
             enemyhealth = 150
@@ -281,8 +248,6 @@ def encounterChoice():
             print("FATAL ERROR!")
         firstEnemy = False
 
-
-
     match enemy:
         case "hard":
             enemyhealth = 250
@@ -293,19 +258,6 @@ def encounterChoice():
         case "medium":
             enemyhealth = 150
 
-    
-
-
-
-
-
-
-
-
-
-
-
-
     if player.cHealth == 0 or 0 > player.cHealth:
         print(f"You ran out of health and died - you had £{player.money}")
         exit()
@@ -315,7 +267,6 @@ def encounterChoice():
     choice = input("> ")
 
     match choice:
-
 
         case "run":
             didRun = False
@@ -335,18 +286,9 @@ def encounterChoice():
                         case _:
                             print("Fatal error!")
 
-
-
                     player.damageTook(damageDealt)
                     print("While trying to escape and the monster followed you")
                     input("> ")
-
-
-
-
-
-
-
 
                 else:
                     didRun = True
@@ -356,8 +298,6 @@ def encounterChoice():
                     previous = True
                     generation()
 
-
-
         case "use":
 
             if player.inv == False:
@@ -366,7 +306,8 @@ def encounterChoice():
 
             else:
 
-                print("You can use anything in your inventory " + "".join(player.inv))
+                print("You can use anything in your inventory " +
+                      "".join(player.inv))
                 useable = input("What would you like to use: ")
 
                 if ("\n" + useable) in player.inv:
@@ -377,7 +318,6 @@ def encounterChoice():
                     print("You do not have that item")
                     encounterChoice()
 
-
         case "drop":
             dropped = input("What item would you like to drop: ")
 
@@ -387,28 +327,20 @@ def encounterChoice():
                 print("You do not have that item...")
                 encounterChoice()
 
-
         case "fight":
-            fight(player=player,enemy=enemy,enemyhealth=enemyhealth)
+            fight(player=player, enemy=enemy, enemyhealth=enemyhealth)
             time.sleep(2)
             room()
             generation()
             previous = True
 
-
-
         case "inv":
-            print("You have: " + "".join(player.inv))
+            print("You have: " + "".join(player.printinv))
             encounterChoice()
-
-
-
 
         case "health":
             player.giveHealth()
             encounterChoice()
-
-
 
         case _:
             print("That is not a valid option!")
@@ -416,7 +348,7 @@ def encounterChoice():
 
 
 def randomEncounter():
-    os.system("cls")
+    os.system("clear")
     print("Uh Oh, you have come across an enemy!")
     print("you can RUN, FIGHT or USE an item.")
     encounterChoice()
@@ -445,12 +377,10 @@ def traderchoice():
 
     choice = input("> ")
 
-
     match choice:
         case "inv":
-            print("You have: " + "".join(player.inv))
+            print("You have: " + "".join(player.printinv))
             traderchoice()
-
 
         case "drop":
             dropped = input("What item would you like to drop: ")
@@ -461,66 +391,61 @@ def traderchoice():
                 print("You do not have that item...")
                 traderchoice()
 
-
         case "use":
 
             if player.inv == False:
                 print("You don't have anything in  your inventory!")
                 traderchoice()
 
-
             else:
-                print("You can use anything in your inventory " + "".join(player.inv))
+                print("You can use anything in your inventory " +
+                      "".join(player.inv))
                 useable = input("What would you like to use: ")
 
                 if ("\n" + useable) in player.inv:
                     use(useable, "trader", player=player)
-
-
-
-
 
                 else:
                     print("You do not have that item")
 
                     traderchoice()
 
-
         case "health":
             player.giveHealth()
             traderchoice()
-
 
         case "shop":
 
             if firstTime == False:
                 if weaponForSale == "":
-                    print(f"The trader has:\n" + food1, "-", data["food"][food1])
+                    print(f"The trader has:\n" + food1,
+                          "-", data["food"][food1])
                     print(food2, "-", data["food"][food2])
                 else:
-                    print(f"The trader has:\n" + food1, "-", data["food"][food1])
+                    print(f"The trader has:\n" + food1,
+                          "-", data["food"][food1])
                     print(food2, "-", data["food"][food2])
                     print(weaponForSale, "-", data["weapons"][weaponForSale])
 
                 traderchoice()
 
         case "leave":
-            os.system("cls")
+            os.system("clear")
             room()
             generation()
 
         case "buy":
-            buy(weaponForSale=weaponForSale, food1=food1,food2=food2,data=data,player=player)
+            buy(weaponForSale=weaponForSale, food1=food1,
+                food2=food2, data=data, player=player)
             traderchoice()
-
-
 
         case "games":
             games(player=player)
-            traderchoice()
+            traderEncounter()
+
 
 def traderEncounter():
-    os.system("cls")
+    os.system("clear")
     print("You have come across a wild trader, who is willing to sell items to you for a fee.")
     print("The trader will also play games with you, and you can earn (or loose) some money.")
     print("Use 'shop' to see what the trader has for sale, or use 'games' to gamble some money")
@@ -550,7 +475,6 @@ def generation():
         print("Game over!")
         exit()
 
-
     elif player.hunger < 20 or player.thirst < 20:
         print("Your hunger and thirst levels are low. You should probably eat something")
 
@@ -574,14 +498,12 @@ def generation():
     elif traderEnc == True and encounter == False:
         traderEncounter()
 
-
-
-
     elif isTrue == True and encounter == False and traderEnc == False:
-        os.system("cls")
+        os.system("clear")
         realname = (generator.room["RoomName"])
 
-        print(f"you find yourself in a {realname} with {generator.doors} door(s)")
+        print(
+            f"you find yourself in a {realname} with {generator.doors} door(s)")
         choices()
 
 
