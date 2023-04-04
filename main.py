@@ -4,7 +4,7 @@ import time
 import os
 
 from helperFuncs import sortinv
-
+from use import use
 from shop import buy
 from fight import fight
 from games import games
@@ -67,7 +67,8 @@ knifeWeapon = weapon(150)
 forkWeapon = weapon(40)
 batWeapon = weapon(60)
 
-player = character(100, 100, 50, 100, 100, False, ["\nmedicine", "\nmedicine"], [""])
+player = character(100, 100, 50, 100, 100, False, [
+                   "\nmedicine", "\nmedicine", "\nd"], [""])
 generator = generation(0, "")
 
 
@@ -99,8 +100,6 @@ def room():
         generator.room = random.choice(data["rooms"])
         generator.doors = random.randint(1, 3)
 
-        sortinv(player=player)
-        print("You have: " + "".join(player.printinv))
 
 
 
@@ -141,6 +140,7 @@ def loot():
 
 
 def choices():
+    sortinv(player=player)
 
     choice = input("> ")
     choice = choice.lower()
@@ -192,7 +192,7 @@ def choices():
                 choices()
 
         case "inv":
-
+            sortinv(player=player)
             print("You have: " + "".join(player.printinv))
             choices()
 
@@ -204,11 +204,12 @@ def choices():
             else:
 
                 print("You can use anything in your inventory " +
-                      "".join(player.inv))
+                      "".join(player.printinv))
                 useable = input("What would you like to use: ")
 
                 if ("\n" + useable) in player.inv:
                     use(useable, False, player=player)
+                    sortinv(player=player)
                     choices()
 
                 else:
@@ -219,6 +220,57 @@ def choices():
         case "health":
             player.giveHealth()
             choices()
+
+        case "save":
+            print("this will overwrite all other saves - proceed? y/n")
+
+            proceed = input("> ")
+
+            match proceed:
+
+                case "y":
+
+                    f = open("save.json", "w")
+
+                    dictionary = {
+                        "cHealth": player.cHealth,
+                        "mHealth": player.mHealth,
+                        "money": player.money,
+                        "thirst": player.thirst,
+                        "inv": player.inv,
+                        "printinv": player.printinv
+
+                    }
+
+                    json_object = json.dumps(dictionary, indent=4)
+
+                    with open("save.json", "w") as outfile:
+                        outfile.write(json_object)
+                    print("game saved")
+                    choices()
+
+                case "n":
+                    choices()
+
+                case _:
+                    choices()
+
+        case "load":
+            with open("save.json", "r") as f:
+
+                data = json.load(f)
+
+                player.cHealth = data["cHealth"]
+                player.mHealth = data["mHealth"]
+                player.money = data["money"]
+                player.hunger = data["hunger"]
+                player.thirst = data["thirst"]
+                player.inv = data["inv"]
+                player.printinv = data["printinv"]
+
+                print("save.json successfully loaded")
+
+                choices()
 
         case _:
             print("that is not a valid option")
@@ -311,7 +363,8 @@ def encounterChoice():
                 useable = input("What would you like to use: ")
 
                 if ("\n" + useable) in player.inv:
-                    use(useable, "enemy")
+                    use(useable, "enemy", player=player)
+                    sortinv(player=player)
 
                 else:
 
@@ -335,6 +388,7 @@ def encounterChoice():
             previous = True
 
         case "inv":
+            sortinv(player=player)
             print("You have: " + "".join(player.printinv))
             encounterChoice()
 
@@ -379,6 +433,7 @@ def traderchoice():
 
     match choice:
         case "inv":
+            sortinv(player=player)
             print("You have: " + "".join(player.printinv))
             traderchoice()
 
@@ -403,7 +458,9 @@ def traderchoice():
                 useable = input("What would you like to use: ")
 
                 if ("\n" + useable) in player.inv:
+                    
                     use(useable, "trader", player=player)
+                    sortinv(player=player)
 
                 else:
                     print("You do not have that item")

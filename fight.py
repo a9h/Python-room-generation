@@ -70,7 +70,7 @@ def fight(player, enemy, enemyhealth):
                             print(
                                 f"You did {damageToEnemy} to the enemy with your {weaponChoice}, the enemy now has {enemyhealth} health remaining")
 
-            elif item not in data["weapons"]:
+            elif weaponChoice not in weaponInv:
                 match enemy:
                     case "hard":
                         healthLost = random.randint(50, 90)
