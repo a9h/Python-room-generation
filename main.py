@@ -2,12 +2,14 @@ import random
 import json
 import time
 import os
+from pystyle import Write, Colors
 
-from helperFuncs import sortinv
-from use import use
-from shop import buy
-from fight import fight
-from games import games
+
+from Functions.helperFuncs import sortinv
+from Functions.use import use
+from Functions.shop import buy
+from Functions.fight import fight
+from Functions.games import games
 
 
 food1 = ""
@@ -27,7 +29,7 @@ class generation:
 
 
 class character:
-    def __init__(self, currentHealth, maxHealth, money, hunger, thirst, haslooted, inv, printinv):
+    def __init__(self, currentHealth, maxHealth, money, hunger, thirst, haslooted):
         self.cHealth = currentHealth
 
         self.mHealth = maxHealth
@@ -40,13 +42,30 @@ class character:
 
         self.haslooted = haslooted
 
-        self.inv = inv
 
-        self.printinv = printinv
+
+
+
+
 
     def giveHealth(self):
-        print(
-            f"Your current health is {self.cHealth} and your max health is {self.mHealth}\nYour hunger is {self.hunger} and your thirst is {self.thirst}\nYou have £{self.money}")
+        Write.Print(f"""
+╔════════╗ ╔════════════╗   ╔════════╗ ╔════════╗
+║ health ║ ║ max health ║   ║ hunger ║ ║ thirst ║ 
+║  {self.cHealth}   ║ ║    {self.mHealth}     ║   ║  {self.hunger}    ║ ║   {self.thirst}   ║        
+╚════════╝ ╚════════════╝   ╚════════╝ ╚════════╝
+           ╔═════════════════════════╗
+           ║          money          ║                              
+           ║           ${self.money}           ║
+           ╚═════════════════════════╝
+        
+""",Colors.white, interval=0.005)
+
+
+
+
+
+
 
     def damageTook(self, damage):
         self.cHealth -= damage
@@ -58,17 +77,48 @@ class character:
                 f"You lost {damage} health, and now have {self.cHealth} left")
 
 
-class weapon:
-    def __init__(self, durability):
-        self.durability = durability
+
+class inventory:
+    def __init__(self,inv, printinv, weaponInv, craftingInv, 
+                 consumableInv, healthInv) -> None:
+        
+
+        self.inv = inv
+
+        self.printinv = printinv
+
+        self.weaponInv = weaponInv
+
+        self.craftingInv = craftingInv
+
+        self.consuableInv = consumableInv
+
+        self.healthInv = healthInv
+        
 
 
-knifeWeapon = weapon(150)
-forkWeapon = weapon(40)
-batWeapon = weapon(60)
 
-player = character(100, 100, 50, 100, 100, False, [
-                   "\nmedicine", "\nmedicine", "\nd"], [""])
+    def printInv(self):
+        print(f"{self.weaponInv}")
+
+
+
+
+inv = inventory(["\nmedicine", "\nmedicine"], 
+                   [""],[""],[""],[""],[""])
+
+
+
+
+
+
+
+
+
+
+player = character(100, 100, 50, 100, 100, False, 
+                   ["\nmedicine", "\nmedicine"], 
+                   [""],[""],[""],[""],[""])
 generator = generation(0, "")
 
 
@@ -87,8 +137,51 @@ def startchoice():
 
 
 def startscreen():
-    print("Type 'help' for a list of commands or 'play' to start")
-    startchoice()
+    os.system("clear")
+    Write.Print("""
+      ╦  ╔═╗╔═╗╔╦╗
+      ║  ║ ║╚═╗ ║ 
+      ╩═╝╚═╝╚═╝ ╩    
+╔═══════════════════════════════════╗
+║         Welcome to lost           ║
+║ Do you have a save to load? (y/n) ║ 
+╚═══════════════════════════════════╝
+""",Colors.white, interval=0.005)
+    choice = input("> ")
+
+    match choice:
+
+        case  "y":
+            with open("Json/save.json", "r") as f:
+
+                data = json.load(f)
+
+                player.cHealth = data["cHealth"]
+                player.mHealth = data["mHealth"]
+                player.money = data["money"]
+                player.hunger = data["hunger"]
+                player.thirst = data["thirst"]
+                inv.inv = data["inv"]
+                inv.printinv = data["printinv"]
+
+                print("save.json successfully loaded")
+                input("")
+
+        case "n":
+            pass
+
+        case _:
+            pass
+
+                
+
+
+            
+
+
+
+    os.system("clear")
+    generation()
 
 
 # "Create" current room
@@ -123,7 +216,7 @@ def loot():
             player.haslooted = True
             print(f"{random.choice(spots)} and found {gathered}!")
 
-            player.inv.append(f"\n{gathered}")
+            inv.inv.append(f"\n{gathered}")
             choices()
 
         else:
@@ -152,8 +245,8 @@ def choices():
         case "drop":
             dropped = input("What item would you like to drop: ")
 
-            if dropped in player.inv:
-                player.inv.remove("\n" + dropped)
+            if dropped in inv.inv:
+                inv.inv.remove("\n" + dropped)
             else:
                 print("You do not have that item...")
                 choices()
@@ -193,21 +286,21 @@ def choices():
 
         case "inv":
             sortinv(player=player)
-            print("You have: " + "".join(player.printinv))
+            print("You have: " + "".join(inv.printinv))
             choices()
 
         case "use":
-            if player.inv == False:
+            if inv.inv == False:
                 print("You dont have anything in  your inventory!")
                 choices()
 
             else:
 
                 print("You can use anything in your inventory " +
-                      "".join(player.printinv))
+                      "".join(inv.printinv))
                 useable = input("What would you like to use: ")
 
-                if ("\n" + useable) in player.inv:
+                if ("\n" + useable) in inv.inv:
                     use(useable, False, player=player)
                     sortinv(player=player)
                     choices()
@@ -230,33 +323,34 @@ def choices():
 
                 case "y":
 
-                    f = open("save.json", "w")
+                    f = open("Json/save.json", "w")
 
                     dictionary = {
                         "cHealth": player.cHealth,
                         "mHealth": player.mHealth,
                         "money": player.money,
+                        "hunger": player.hunger,
                         "thirst": player.thirst,
-                        "inv": player.inv,
-                        "printinv": player.printinv
+                        "inv": inv.inv,
+                        "printinv": inv.printinv
 
                     }
 
                     json_object = json.dumps(dictionary, indent=4)
 
-                    with open("save.json", "w") as outfile:
+                    with open("Json/save.json", "w") as outfile:
                         outfile.write(json_object)
                     print("game saved")
                     choices()
 
-                case "n":
+                case "n":   
                     choices()
 
                 case _:
                     choices()
 
         case "load":
-            with open("save.json", "r") as f:
+            with open("Json/save.json", "r") as f:
 
                 data = json.load(f)
 
@@ -265,8 +359,8 @@ def choices():
                 player.money = data["money"]
                 player.hunger = data["hunger"]
                 player.thirst = data["thirst"]
-                player.inv = data["inv"]
-                player.printinv = data["printinv"]
+                inv.inv = data["inv"]
+                inv.printinv = data["printinv"]
 
                 print("save.json successfully loaded")
 
@@ -302,6 +396,7 @@ def encounterChoice():
 
     match enemy:
         case "hard":
+            
             enemyhealth = 250
 
         case "easy":
@@ -352,19 +447,20 @@ def encounterChoice():
 
         case "use":
 
-            if player.inv == False:
+            if inv.inv == False:
                 print("You don't have anything in  your inventory!")
                 encounterChoice()
 
             else:
 
                 print("You can use anything in your inventory " +
-                      "".join(player.inv))
+                      "".join(inv.inv))
                 useable = input("What would you like to use: ")
 
-                if ("\n" + useable) in player.inv:
+                if ("\n" + useable) in inv.inv:
                     use(useable, "enemy", player=player)
                     sortinv(player=player)
+                    encounterChoice()
 
                 else:
 
@@ -374,14 +470,14 @@ def encounterChoice():
         case "drop":
             dropped = input("What item would you like to drop: ")
 
-            if dropped in player.inv:
-                player.inv.remove("\n" + dropped)
+            if dropped in inv.inv:
+                inv.inv.remove("\n" + dropped)
             else:
                 print("You do not have that item...")
                 encounterChoice()
 
         case "fight":
-            fight(player=player, enemy=enemy, enemyhealth=enemyhealth)
+            fight(player=player, enemy=enemy, enemyhealth=enemyhealth, inv=inv)
             time.sleep(2)
             room()
             generation()
@@ -389,7 +485,7 @@ def encounterChoice():
 
         case "inv":
             sortinv(player=player)
-            print("You have: " + "".join(player.printinv))
+            print("You have: " + "".join(inv.printinv))
             encounterChoice()
 
         case "health":
@@ -434,33 +530,33 @@ def traderchoice():
     match choice:
         case "inv":
             sortinv(player=player)
-            print("You have: " + "".join(player.printinv))
+            print("You have: " + "".join(inv.printinv))
             traderchoice()
 
         case "drop":
             dropped = input("What item would you like to drop: ")
 
-            if dropped in player.inv:
-                player.inv.remove("\n" + dropped)
+            if dropped in inv.inv:
+                inv.inv.remove("\n" + dropped)
             else:
                 print("You do not have that item...")
                 traderchoice()
 
         case "use":
 
-            if player.inv == False:
+            if inv.inv == False:
                 print("You don't have anything in  your inventory!")
                 traderchoice()
 
             else:
                 print("You can use anything in your inventory " +
-                      "".join(player.inv))
+                      "".join(inv.inv))
                 useable = input("What would you like to use: ")
 
-                if ("\n" + useable) in player.inv:
+                if ("\n" + useable) in inv.inv:
                     
                     use(useable, "trader", player=player)
-                    sortinv(player=player)
+                    sortinv(player=player, inv=inv)
 
                 else:
                     print("You do not have that item")
@@ -559,8 +655,8 @@ def generation():
         os.system("clear")
         realname = (generator.room["RoomName"])
 
-        print(
-            f"you find yourself in a {realname} with {generator.doors} door(s)")
+        Write.Print(f"""you find yourself in a {realname} with {generator.doors} door(s)
+""", Colors.white, interval=0.005)
         choices()
 
 

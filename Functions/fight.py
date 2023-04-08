@@ -1,14 +1,15 @@
 import random
 import json
+import os
+from pystyle import Write, Colors
 
-
-def fight(player, enemy, enemyhealth):
+def fight(player, enemy, enemyhealth, inv):
 
     weaponInv = []
-    for x in player.inv:
+    for x in inv.inv:
 
         weaponList = ["\nknife", "\nfork", "\nbat",
-                      "\ntorch", "\ncrowbar", "\nbranch", "\nshovel"]
+                      "\ntorch", "\ncrowbar", "\nbranch", "\nshovel", "\nsword", "\nlongsword"]
         if x in weaponList:
             weaponInv.append(x)
 
@@ -21,11 +22,14 @@ def fight(player, enemy, enemyhealth):
             damageTaken = random.randint(2, 25)
         else:
             print("Fatal error!")
-        print(
-            f"You don't have any weapons to attack with, and lost {damageTaken} health")
+
         player.cHealth -= damageTaken
-        print("Pro tip - next time RUN if you don't have any weapons")
-        fight()
+
+        os.system("clear")
+        Write.Print(f"You don't have any weapons to attack with, and lost {damageTaken} health",Colors.white, interval=0.005)
+        pass
+
+
 
     else:
 
@@ -50,7 +54,7 @@ def fight(player, enemy, enemyhealth):
                     didScare = random.randint(1, 100)
                     if didScare < 25:
                         print("You light your torch and scare off the enemy!")
-                        player.inv.remove("\ntorch")
+                        inv.inv.remove("\ntorch")
 
                     else:
                         print("The enemy did not care about your torch")
