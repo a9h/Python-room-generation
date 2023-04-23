@@ -8,7 +8,12 @@ import fileinput
 
 
 
-def use(item, encounter, player,):
+
+
+
+
+
+def use(item, encounter, player,inv):
     with open("Json/stats.json") as f, open("Json/weapons.json") as b:
         data = json.load(f)
         wdata = json.load(b)
@@ -26,7 +31,6 @@ def use(item, encounter, player,):
 
             hungerDifference = 100 - player.hunger
             thirstDifference = 100 - player.thirst
-
             if randomThirst > thirstDifference:
                 player.thirst += thirstDifference
                 if player.thirst > 100:
@@ -47,7 +51,7 @@ def use(item, encounter, player,):
                 player.thirst += randomThirst
             print(f"you used {item} and gained {randomHunger} hunger and {randomThirst} thirst")
             print(f"your current hunger and thirst levels are {player.hunger} and {player.thirst}")
-            player.inv.remove("\n" + item)
+            inv.inv.remove("\n" + item)
 
 
 
@@ -58,7 +62,7 @@ def use(item, encounter, player,):
             FindOption = data["maxhealth"]
             ToAdd = random.choice(FindOption[item])
             player.mHealth += ToAdd
-            player.inv.remove("\n" + item)
+            inv.inv.remove("\n" + item)
             print(f"Max health increased to {player.mHealth}")
 
 
@@ -78,5 +82,5 @@ def use(item, encounter, player,):
                 player.cHealth += ToAdd2
                 print(f"current health increased to {player.cHealth}")
 
-            player.inv.remove("\n" + item)
+            inv.inv.remove("\n" + item)
 

@@ -90,6 +90,7 @@ def higherOrLower(player1):
 
     while passed == False:
         try:
+            print("please enter your bet")
             bet = int(input(">"))
             passed = True
 
@@ -107,19 +108,19 @@ def higherOrLower(player1):
     if guess == "high" or guess == "low":
             if guess == "high" and hint < number:
                 print(f"Correct! the number was {number}")
-                toAdd = guess * 1.5
+                toAdd = float(guess) * 1.5
                 player1.money = player1.money + toAdd
             elif guess.content == "low" and hint > number:
 
                 print(f"correct! the number was {number}")
-                toAdd = guess * 1.5
+                toAdd = float(guess) * 1.5
                 player1.money = player1.money + toAdd
             elif guess.content == "low" and number > hint or guess.content == "high" and number < hint:
                 print(f"WRONG! the number was {number}")
                 
             elif guess == number:
                 print("SPOT ON! Your bet was multiplied by 8x")
-                toAdd = guess * 8
+                toAdd = float(guess) * 8
                 player1.money = player1.money + toAdd
 
 

@@ -1,4 +1,4 @@
-def buy(weaponForSale, food1, food2, data, player):
+def buy(weaponForSale, food1, food2, data, player,inv):
     food1Price = (data["food"][food1])
     food2Price = (data["food"][food2])
     if weaponForSale == "":
@@ -22,7 +22,7 @@ def buy(weaponForSale, food1, food2, data, player):
         if confirm == "y":
             if player.money > food1Price or player.money == food1Price:
                 player.money -= food1Price
-                player.inv.append("\n" + food1)
+                inv.inv.append("\n" + food1)
                 print(f"You now have £{player.money} remaining")
 
             else:
@@ -33,7 +33,7 @@ def buy(weaponForSale, food1, food2, data, player):
         if confirm == "y":
             if player.money > food2Price or player.money == food2Price:
                 player.money -= food2Price
-                player.inv.append("\n" + food2)
+                inv.inv.append("\n" + food2)
                 print(f"You now have £{player.money} remaining")
 
             else:
@@ -44,7 +44,7 @@ def buy(weaponForSale, food1, food2, data, player):
         if confirm == "y":
             if player.money > weaponPrice or player.money == weaponPrice:
                 player.money -= weaponPrice
-                player.inv.append("\n" + weaponForSale)
+                inv.inv.append("\n" + weaponForSale)
                 print(f"You now have £{player.money} remaining")
 
             else:

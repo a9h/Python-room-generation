@@ -3,7 +3,7 @@
         
         {
             "RoomName" : "Kitchen",
-            "LootTables" : ["knife", "carrot", "meat","tomato", "chocolate", "fork", "waterbottle"]
+            "LootTables" : ["knife", "carrot", "tomato", "chocolate", "fork", "waterbottle"]
         },
         {
             "RoomName" : "Bedroom",

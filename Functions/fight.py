@@ -42,13 +42,13 @@ def fight(player, enemy, enemyhealth, inv):
                 exit()
 
             if firstTime == True:
-                print("you have:" + "".join(weaponInv))
+                print("you have:" + "".join(inv.weaponInv))
                 firstTime = False
             weaponChoice = input(
                 "What weapon do you want to attack the enemy with? > ")
             print("")
 
-            if ("\n" + weaponChoice) in weaponInv:
+            if ("\n" + weaponChoice) in inv.weaponInv:
 
                 if weaponChoice == "torch":
                     didScare = random.randint(1, 100)
@@ -74,7 +74,7 @@ def fight(player, enemy, enemyhealth, inv):
                             print(
                                 f"You did {damageToEnemy} to the enemy with your {weaponChoice}, the enemy now has {enemyhealth} health remaining")
 
-            elif weaponChoice not in weaponInv:
+            elif weaponChoice not in inv.weaponInv:
                 match enemy:
                     case "hard":
                         healthLost = random.randint(50, 90)

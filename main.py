@@ -5,12 +5,12 @@ import os
 from pystyle import Write, Colors
 
 
-from Functions.helperFuncs import sortinv
+from Functions.helperFuncs import sortinv, printinv
 from Functions.use import use
 from Functions.shop import buy
 from Functions.fight import fight
 from Functions.games import games
-
+from Functions.admin import admin
 
 food1 = ""
 food2 = ""
@@ -79,19 +79,19 @@ class character:
 
 
 class inventory:
-    def __init__(self,inv, printinv, weaponInv, craftingInv, 
+    def __init__(self,inv, weaponInv, craftingInv, 
                  consumableInv, healthInv) -> None:
         
 
         self.inv = inv
 
-        self.printinv = printinv
+
 
         self.weaponInv = weaponInv
 
         self.craftingInv = craftingInv
 
-        self.consuableInv = consumableInv
+        self.consumableInv = consumableInv
 
         self.healthInv = healthInv
         
@@ -105,7 +105,7 @@ class inventory:
 
 
 inv = inventory(["\nmedicine", "\nmedicine"], 
-                   [""],[""],[""],[""],[""])
+[""],[""],[""],[""])
 
 
 
@@ -117,8 +117,7 @@ inv = inventory(["\nmedicine", "\nmedicine"],
 
 
 player = character(100, 100, 50, 100, 100, False, 
-                   ["\nmedicine", "\nmedicine"], 
-                   [""],[""],[""],[""],[""])
+)
 generator = generation(0, "")
 
 
@@ -162,7 +161,10 @@ def startscreen():
                 player.hunger = data["hunger"]
                 player.thirst = data["thirst"]
                 inv.inv = data["inv"]
-                inv.printinv = data["printinv"]
+                inv.consumableInv = data["consumableInv"]
+                inv.craftingInv = data["craftingInv"]
+                inv.healthInv = data["healthInv"]
+                inv.weaponInv = data["weaponInv"]
 
                 print("save.json successfully loaded")
                 input("")
@@ -214,9 +216,30 @@ def loot():
     if player.haslooted == False:
         if lucky < 33:
             player.haslooted = True
-            print(f"{random.choice(spots)} and found {gathered}!")
+            
+            key = random.randint(1,125)
+
+            if key > 50:
+                money = 0
+            elif key < 50 and key < 100:
+                money = random.randint(15,25)
+            elif key > 100:
+                money = random.randint(25,40)
+            else:
+                money = 0
+
+
+
+
+            if money == 0:
+                print(f"{random.choice(spots)} and found {gathered}")
+            else:
+                print(f"{random.choice(spots)} and found {gathered} & £{money}!")
+
+
 
             inv.inv.append(f"\n{gathered}")
+            player.money = player.money + money
             choices()
 
         else:
@@ -233,7 +256,7 @@ def loot():
 
 
 def choices():
-    sortinv(player=player)
+    sortinv(player=player, inv=inv)
 
     choice = input("> ")
     choice = choice.lower()
@@ -285,9 +308,16 @@ def choices():
                 choices()
 
         case "inv":
-            sortinv(player=player)
-            print("You have: " + "".join(inv.printinv))
+            sortinv(player=player,inv=inv)
+            printinv(inv=inv)
             choices()
+
+        case "admin":
+            admin(player=player,inv=inv)
+            choice()
+
+
+
 
         case "use":
             if inv.inv == False:
@@ -297,12 +327,12 @@ def choices():
             else:
 
                 print("You can use anything in your inventory " +
-                      "".join(inv.printinv))
+                      "".join(inv.healthInv)+"".join(inv.consumableInv))
                 useable = input("What would you like to use: ")
 
                 if ("\n" + useable) in inv.inv:
-                    use(useable, False, player=player)
-                    sortinv(player=player)
+                    use(useable, False, player=player,inv=inv)
+                    sortinv(player=player,inv=inv)
                     choices()
 
                 else:
@@ -332,7 +362,10 @@ def choices():
                         "hunger": player.hunger,
                         "thirst": player.thirst,
                         "inv": inv.inv,
-                        "printinv": inv.printinv
+                        "consumableInv" : inv.consumableInv,
+                        "craftingInv":inv.craftingInv, 
+                        "healthInv":inv.healthInv, 
+                        "weaponInv":inv.weaponInv, 
 
                     }
 
@@ -360,7 +393,10 @@ def choices():
                 player.hunger = data["hunger"]
                 player.thirst = data["thirst"]
                 inv.inv = data["inv"]
-                inv.printinv = data["printinv"]
+                inv.consumableInv = data["consumableInv"]
+                inv.craftingInv = data["craftingInv"]
+                inv.healthInv = data["healthInv"]
+                inv.weaponInv = data["weaponInv"]
 
                 print("save.json successfully loaded")
 
@@ -454,12 +490,12 @@ def encounterChoice():
             else:
 
                 print("You can use anything in your inventory " +
-                      "".join(inv.inv))
+                      "".join(inv.consumableInv, inv.healthInv))
                 useable = input("What would you like to use: ")
 
                 if ("\n" + useable) in inv.inv:
-                    use(useable, "enemy", player=player)
-                    sortinv(player=player)
+                    use(useable, "enemy", player=player, inv=inv)
+                    sortinv(player=player,inv=inv)
                     encounterChoice()
 
                 else:
@@ -484,8 +520,9 @@ def encounterChoice():
             previous = True
 
         case "inv":
-            sortinv(player=player)
-            print("You have: " + "".join(inv.printinv))
+            sortinv(player=player,inv=inv)
+            printinv(inv=inv)
+
             encounterChoice()
 
         case "health":
@@ -529,8 +566,8 @@ def traderchoice():
 
     match choice:
         case "inv":
-            sortinv(player=player)
-            print("You have: " + "".join(inv.printinv))
+            sortinv(player=player,inv=inv)
+            printinv(inv=inv)
             traderchoice()
 
         case "drop":
@@ -550,12 +587,12 @@ def traderchoice():
 
             else:
                 print("You can use anything in your inventory " +
-                      "".join(inv.inv))
+                      "".join(inv.healthInv)+"".join(inv.consumableInv))
                 useable = input("What would you like to use: ")
 
                 if ("\n" + useable) in inv.inv:
                     
-                    use(useable, "trader", player=player)
+                    use(useable, "trader", player=player,inv=inv)
                     sortinv(player=player, inv=inv)
 
                 else:
@@ -589,7 +626,7 @@ def traderchoice():
 
         case "buy":
             buy(weaponForSale=weaponForSale, food1=food1,
-                food2=food2, data=data, player=player)
+                food2=food2, data=data, player=player,inv=inv)
             traderchoice()
 
         case "games":

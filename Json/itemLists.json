@@ -4,5 +4,7 @@
 
     "craftingList" : [""],
 
-    "consumableList" : ["\ntomato","\ncannedfood","\ncarrot", "\nwaterbottle", "\nsteak", "\nchocolate", "\nmushroom"]
+    "consumableList" : ["\ntomato","\ncannedfood","\ncarrot", "\nwaterbottle", "\nsteak", "\nchocolate", "\nmushroom"],
+
+    "healthList" : ["\nmedkit","\npills", "\nbandage", "\nmedicine"]
 }
