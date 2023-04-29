@@ -15,7 +15,7 @@
         },
         {
             "RoomName" : "Basement",
-            "LootTables" : ["crowbar", "torch","waterbottle"]
+            "LootTables" : ["crowbar", "torch","waterbottle", "scrapmetal"]
         },
         {
             "RoomName" : "Garden",

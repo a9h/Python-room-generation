@@ -11,6 +11,10 @@ from Functions.shop import buy
 from Functions.fight import fight
 from Functions.games import games
 from Functions.admin import admin
+from Functions.crafting import crafting
+
+
+
 
 food1 = ""
 food2 = ""
@@ -20,6 +24,16 @@ weaponForSale = ""
 enemy = ""
 firstEnemy = True
 previous = True
+
+
+class armour:
+    def __init__(self,head,chest,legs) -> None:
+        self.head = head
+        self.chest = chest
+        self.legs = legs
+
+
+
 
 
 class generation:
@@ -110,7 +124,7 @@ inv = inventory(["\nmedicine", "\nmedicine"],
 
 
 
-
+armour = armour(0,0,0)
 
 
 
@@ -119,6 +133,8 @@ inv = inventory(["\nmedicine", "\nmedicine"],
 player = character(100, 100, 50, 100, 100, False, 
 )
 generator = generation(0, "")
+
+
 
 
 def startchoice():
@@ -317,7 +333,8 @@ def choices():
             choice()
 
 
-
+        case "crafting":
+            crafting(inv=inv,player=player)
 
         case "use":
             if inv.inv == False:
@@ -632,6 +649,10 @@ def traderchoice():
         case "games":
             games(player=player)
             traderEncounter()
+
+        case _:
+            print("That is not a valid option")
+            traderchoice()
 
 
 def traderEncounter():

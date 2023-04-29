@@ -1,14 +1,13 @@
 from collections import Counter
 import json
 import os
-import re
+
 
 def sortinv(player, inv):
     if player.thirst > 100 or player.hunger > 100:
         player.thirst = 100
         player.hunger = 100
-    weaponList = ["\nknife", "\nfork", "\nbat",
-    "\ntorch", "\ncrowbar", "\nbranch", "\nshovel", "\nsword", "\nlongsword"]
+
 
     
 
@@ -38,6 +37,7 @@ def sortinv(player, inv):
                  
 
                     elif item in data["craftingList"]:
+                        print(f"added {item} to craftinginv")
                         inv.craftingInv.append(item)
                     
                     elif item in data["consumableList"]:
@@ -62,6 +62,7 @@ def sortinv(player, inv):
 
 
                     elif item in data["craftingList"]:
+                        print(f"added duplicate x {item} to craftinginv")
                         inv.craftingInv.append(f"{duplicate} x{count}")
 
                     
@@ -76,8 +77,10 @@ def sortinv(player, inv):
 
                     else:
                         print("mad error")
+    
     uniqueW = list(set(inv.weaponInv))
     inv.weaponInv = uniqueW
+
     for item in inv.weaponInv:
         for num in range(100):
             if (item+f" x{num}") in inv.weaponInv:
@@ -89,8 +92,18 @@ def sortinv(player, inv):
 
 
 
+
     uniqueCr = list(set(inv.craftingInv))
     inv.craftingIng = uniqueCr
+    for item in inv.craftingInv:
+        for num in range(100):
+            if (item+f" x{num}") in inv.craftingInv:
+                inv.craftingInv.remove(item)
+            else:
+                pass
+
+
+
     uniqueC = list(set(inv.consumableInv))
     inv.consumableInv = uniqueC
 
@@ -229,107 +242,3 @@ Crafting
 
 
 
-def useinv(inv):    
-    
-    inventory()  
-    print("type use (item) to use your item")  
-    
-    counter = 0
-
-    print("""
-Consumables
-═══════════
-    """ + "".join(inv.consumableInv))
-
-    exit = False
-
-    while exit == False:
-        print("")
-        cycle = input("> ")
-
-        if cycle == ">":
-            if counter + 1 > 3:
-                counter = 0
-            else:
-                counter = counter +1
-
-            match counter:
-
-                    case 0:
-                        inventory()
-                        print("""
-Consumables
-═══════════
-            """ + "".join(inv.consumableInv))
-                        
-
-                    case 1:
-                        inventory()
-                        print("""
-Healables
-═════════
-            """ + "".join(inv.healthInv))
-                    
-                    case 2:
-                        inventory()
-                        print("""
-Crafting
-════════
-            """ + "".join(inv.craftingInv))
-
-        elif cycle == "<":
-            if counter - 1 < 0:
-                counter = 3
-            else:
-                counter = counter - 1
-            match counter:
-
-                    case 0:
-                        inventory()
-                        print("""
-Consumables
-═══════════
-            """ + "".join(inv.consumableInv))
-                        
-                        
-                    case 1:
-                        inventory()
-                        print("""
-Healables
-═════════
-            """ + "".join(inv.healthInv))
-                    
-                    case 3:
-                        inventory()
-                        print("""
-Crafting
-════════
-            """ + "".join(inv.craftingInv))
-                        
-        elif cycle == "exit":
-            os.system("clear")
-            exit = True
-            pass
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
