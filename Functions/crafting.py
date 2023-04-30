@@ -1,56 +1,128 @@
 import os
 from pystyle import Write, Colors
 import json
-
+import time
 class craftables:
-        def __init__(self,completeRecipies) -> None:
+        def __init__(self,completeRecipies,craftInv) -> None:
                 self.completeRecipies = completeRecipies
-
-
-craftables = craftables([])
-
-
-
-
+                self.craftInv = craftInv
 
 
 
         
 
 
+craftables = craftables([], [])
 
 
 
-"""
-def recipies(inv):
-        with open ("Json/recipies.json", "r") as f:
-                data = json.load(f)
-                for recipie in data:
-                        print(recipie)
-                        counter1 = 0
-                        counter2 = 0
-                        for item in recipie:
-                                print(item)
-                                counter1 = counter1 + 1
 
-                                for x in inv.craftingInv:
-                                        if x == ("\n"+item):
-                                                counter2 = counter2 +1
-                                        else:
-                                                pass
 
-                        if counter1 == counter2:
-                                craftables.completeRecipies.append(item)
+
+def getRecepies(ingredients):
+
+
+
+
+                
+
+
+
+
+        with open ("Json/recipies.json", "r") as r:
+                data = json.load(r)
+                for thing in data:
+                        scrapcount = 0
+                        ironcount = 0
+                        for b in data[thing]:
+                                if b == "\nscrapmetal":
+                                        scrapcount += 1
+                                elif b == "\niron":
+                                        ironcount += 1
+
+                        if scrapcount <= ingredients.metal and ironcount <= ingredients.iron:
+                                craftables.completeRecipies.append("".join(thing))
                         else:
-                                 pass
-                        
-                print(f"available recipies: {craftables.completeRecipies}")
-                input()
-"""
-                        
-                                
+                                pass
+                
+
+
+
+
+                
+
+                
 
                         
+
+                        
+
+        
+
+        
+
+
+
+
+
+                        
+                                
+def make(inv,ingredients):
+        print("available recipies: \n".join(craftables.completeRecipies))
+
+
+        if craftables.completeRecipies == []:
+                print("There is nothing you can craft!")
+                
+        else:
+                with open ("Json/recipies.json", "r") as r:
+                        data = json.load(r)
+                        choice = input("> ")
+                        for thing in data:
+                                
+                                if thing == choice:
+                                        scrapcount = 0
+                                        ironcount = 0
+                                        for b in data[thing]:
+                                                if b == "\nscrapmetal":
+                                                        scrapcount += 1
+                                                elif b == "\niron":
+                                                        ironcount += 1
+                                        if scrapcount <= ingredients.metal and ironcount <= ingredients.iron:
+                                                        print(f"-- Crafted {thing} --")
+                                                        print(f"It used {scrapcount} metal and {ironcount} iron")
+
+
+                                                        input()
+                                                        inv.inv.append(f"\n{thing}")
+
+                                                        ingredients.metal =- scrapcount 
+                                                        ingredients.iron =- ironcount
+
+                                                        
+                                                        for c in data[thing]:
+                                                                if c == "\nscrapmetal":
+                                                                        inv.inv.remove("\nscrapmetal")
+                                                                elif c == "\niron":
+                                                                        inv.inv.remove("\niron")
+
+                                                        
+                                                        crafting(inv=inv,ingredients=ingredients)
+                                        else:
+                                                print("you do not have the correct ingredients!")
+                                                input()
+                                                crafting(inv=inv,ingredients=ingredients)
+
+                                else:
+                                        print(f"You cannot make {choice}")
+                                        input
+                                        crafting(inv=inv,ingredients=ingredients)
+                                        
+                                                
+
+
+
+
                                 
         
 
@@ -63,7 +135,7 @@ def recipies(inv):
 
 
 
-def crafting(player, inv):
+def crafting(inv,ingredients):
         os.system("clear")
         Write.Print("""
     ╔════════════════════════════════════════════╗   
@@ -71,11 +143,23 @@ def crafting(player, inv):
     ║    ║    ╠╦╝  ╠═╣  ╠╣    ║   ║  ║║║  ║ ╦    ║
     ║    ╚═╝  ╩╚═  ╩ ╩  ╚     ╩   ╩  ╝╚╝  ╚═╝    ║
     ╚════════════════════════════════════════════╝
-                                                                
-            ════════════════════════╝                           
+            Use 'make' to start crafting                                                    
+            ═══════════════════════════╝                           
 """, Colors.white, interval=0.005)
 
-        input()
+
+        getRecepies(ingredients=ingredients)
+
+       
+        choice = input(">")
+
+        match choice:
+                case "make":
+                        make(inv=inv,ingredients=ingredients)
+                case "exit": 
+                        pass
+                case _:
+                        crafting(inv=inv,ingredients=ingredients)
         
     
 

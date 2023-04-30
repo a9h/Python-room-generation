@@ -3,7 +3,42 @@ import json
 import os
 
 
-def sortinv(player, inv):
+
+        
+
+def craftingConvert(inv,ingredients):
+    counter = 0
+    for item in inv.inv:
+
+
+        if item == "\nscrapmetal":
+            counter +=1
+
+        else:
+            pass
+
+    ingredients.metal = counter
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+def sortinv(player, inv,ingredients):
+    craftingConvert(inv=inv,ingredients=ingredients)
     if player.thirst > 100 or player.hunger > 100:
         player.thirst = 100
         player.hunger = 100
@@ -19,6 +54,7 @@ def sortinv(player, inv):
     inv.craftingInv = [""]
     inv.consumableInv = [""]
     inv.healthInv = [""]
+    inv.armorInv = [""]
     with open("Json/itemLists.json", "r") as f:
     
         data = json.load(f)
@@ -37,7 +73,7 @@ def sortinv(player, inv):
                  
 
                     elif item in data["craftingList"]:
-                        print(f"added {item} to craftinginv")
+
                         inv.craftingInv.append(item)
                     
                     elif item in data["consumableList"]:
@@ -46,6 +82,9 @@ def sortinv(player, inv):
 
                     elif item in data["healthList"]:
                         inv.healthInv.append(item)
+                    elif item in data["armorList"]:
+                        inv.armorInv.append(item)
+
 
 
                     else:
@@ -62,7 +101,7 @@ def sortinv(player, inv):
 
 
                     elif item in data["craftingList"]:
-                        print(f"added duplicate x {item} to craftinginv")
+
                         inv.craftingInv.append(f"{duplicate} x{count}")
 
                     
@@ -73,6 +112,9 @@ def sortinv(player, inv):
 
                     elif item in data["healthList"]:
                         inv.healthInv.append(f"{duplicate} x{count}")
+
+                    elif item in data["armorList"]:
+                        inv.armorInv.append(f"{duplicate} x{count}")
 
 
                     else:
@@ -91,10 +133,21 @@ def sortinv(player, inv):
 
 
 
+    uniqueA = list(set(inv.armorInv))
+    inv.armorInv = uniqueA
+
+    for item in inv.armorInv:
+        for num in range(100):
+            if (item+f" x{num}") in inv.armorInv:
+                inv.armorInv.remove(item)
+            else:
+                pass
+
 
 
     uniqueCr = list(set(inv.craftingInv))
-    inv.craftingIng = uniqueCr
+    inv.craftingInv = uniqueCr
+
     for item in inv.craftingInv:
         for num in range(100):
             if (item+f" x{num}") in inv.craftingInv:
@@ -124,10 +177,20 @@ def sortinv(player, inv):
                 inv.healthInv.remove(item)
             else:
                 pass
+
+
+
+
+
+
+
+
+
                         
 
 
 def inventory():
+
         os.system("clear")
         print("""
 ╔════════════════════════════════════════════╗    
@@ -144,7 +207,7 @@ def inventory():
 
 
 
-def printinv(inv):
+def printinv(inv,ingredients):
     inventory()
 
 
@@ -163,7 +226,7 @@ Consumables
         cycle = input("> ")
 
         if cycle == ">":
-            if counter + 1 > 3:
+            if counter + 1 > 4:
                 counter = 0
             else:
                 counter = counter +1
@@ -197,10 +260,19 @@ Healables
 Crafting
 ════════
             """ + "".join(inv.craftingInv))
+                        
+                    
+                    case 4:
+                        inventory()
+                        print("""
+Armour
+══════
+            """ + "".join(inv.armorInv))
+                    
 
         elif cycle == "<":
             if counter - 1 < 0:
-                counter = 3
+                counter = 4
             else:
                 counter = counter - 1
             match counter:
@@ -232,6 +304,14 @@ Healables
 Crafting
 ════════
             """ + "".join(inv.craftingInv))
+                        
+                    
+                    case 4:
+                        inventory()
+                        print("""
+Armour
+══════
+            """ + "".join(inv.armorInv))
                         
         elif cycle == "exit":
             os.system("clear")

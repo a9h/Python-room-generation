@@ -6,5 +6,8 @@
 
     "consumableList" : ["\ntomato","\ncannedfood","\ncarrot", "\nwaterbottle", "\nsteak", "\nchocolate", "\nmushroom"],
 
-    "healthList" : ["\nmedkit","\npills", "\nbandage", "\nmedicine"]
+    "healthList" : ["\nmedkit","\npills", "\nbandage", "\nmedicine"],
+
+    "armorList" : ["\nscrapHelmet", "\nscrapBoots"]
+
 }

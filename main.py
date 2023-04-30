@@ -25,6 +25,16 @@ enemy = ""
 firstEnemy = True
 previous = True
 
+class ingredients:
+    def __init__(self,metal,iron) -> None:
+        self.metal = metal
+        self.iron = iron
+
+
+
+
+
+
 
 class armour:
     def __init__(self,head,chest,legs) -> None:
@@ -94,7 +104,7 @@ class character:
 
 class inventory:
     def __init__(self,inv, weaponInv, craftingInv, 
-                 consumableInv, healthInv) -> None:
+                 consumableInv, healthInv,armorInv) -> None:
         
 
         self.inv = inv
@@ -109,6 +119,7 @@ class inventory:
 
         self.healthInv = healthInv
         
+        self.armorInv = armorInv
 
 
 
@@ -119,7 +130,7 @@ class inventory:
 
 
 inv = inventory(["\nmedicine", "\nmedicine"], 
-[""],[""],[""],[""])
+[""],[""],[""],[""], [""])
 
 
 
@@ -127,7 +138,7 @@ inv = inventory(["\nmedicine", "\nmedicine"],
 armour = armour(0,0,0)
 
 
-
+ingredients = ingredients(0,0)
 
 
 player = character(100, 100, 50, 100, 100, False, 
@@ -181,6 +192,10 @@ def startscreen():
                 inv.craftingInv = data["craftingInv"]
                 inv.healthInv = data["healthInv"]
                 inv.weaponInv = data["weaponInv"]
+                ingredients.iron = data["iron"]
+                ingredients.metal = data["metal"]
+                inv.armorInv = data["armorInv"]
+                
 
                 print("save.json successfully loaded")
                 input("")
@@ -272,7 +287,7 @@ def loot():
 
 
 def choices():
-    sortinv(player=player, inv=inv)
+    sortinv(player=player, inv=inv,ingredients=ingredients)
 
     choice = input("> ")
     choice = choice.lower()
@@ -324,17 +339,18 @@ def choices():
                 choices()
 
         case "inv":
-            sortinv(player=player,inv=inv)
-            printinv(inv=inv)
+            sortinv(player=player,inv=inv,ingredients=ingredients)
+            printinv(inv=inv,ingredients=ingredients)
             choices()
 
         case "admin":
             admin(player=player,inv=inv)
-            choice()
+            choices()
 
 
         case "crafting":
-            crafting(inv=inv,player=player)
+            crafting(inv=inv,ingredients=ingredients)
+            choices()
 
         case "use":
             if inv.inv == False:
@@ -349,7 +365,7 @@ def choices():
 
                 if ("\n" + useable) in inv.inv:
                     use(useable, False, player=player,inv=inv)
-                    sortinv(player=player,inv=inv)
+                    sortinv(player=player,inv=inv,ingredients=ingredients)
                     choices()
 
                 else:
@@ -383,6 +399,9 @@ def choices():
                         "craftingInv":inv.craftingInv, 
                         "healthInv":inv.healthInv, 
                         "weaponInv":inv.weaponInv, 
+                        "metal": ingredients.metal,
+                        "iron": ingredients.iron,
+                        "armorInv" : inv.armorInv
 
                     }
 
@@ -414,6 +433,9 @@ def choices():
                 inv.craftingInv = data["craftingInv"]
                 inv.healthInv = data["healthInv"]
                 inv.weaponInv = data["weaponInv"]
+                ingredients.iron = data["iron"]
+                ingredients.metal = data["metal"]
+                inv.armorInv = data["armorInv"]
 
                 print("save.json successfully loaded")
 
@@ -512,7 +534,7 @@ def encounterChoice():
 
                 if ("\n" + useable) in inv.inv:
                     use(useable, "enemy", player=player, inv=inv)
-                    sortinv(player=player,inv=inv)
+                    sortinv(player=player,inv=inv,ingredients=ingredients)
                     encounterChoice()
 
                 else:
@@ -537,8 +559,8 @@ def encounterChoice():
             previous = True
 
         case "inv":
-            sortinv(player=player,inv=inv)
-            printinv(inv=inv)
+            sortinv(player=player,inv=inv,ingredients=ingredients)
+            printinv(inv=inv,ingredients=ingredients)
 
             encounterChoice()
 
@@ -583,8 +605,8 @@ def traderchoice():
 
     match choice:
         case "inv":
-            sortinv(player=player,inv=inv)
-            printinv(inv=inv)
+            sortinv(player=player,inv=inv,ingredients=ingredients)
+            printinv(inv=inv,ingredients=ingredients)
             traderchoice()
 
         case "drop":
@@ -610,7 +632,7 @@ def traderchoice():
                 if ("\n" + useable) in inv.inv:
                     
                     use(useable, "trader", player=player,inv=inv)
-                    sortinv(player=player, inv=inv)
+                    sortinv(player=player, inv=inv,ingredients=ingredients)
 
                 else:
                     print("You do not have that item")

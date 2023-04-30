@@ -1,3 +1,4 @@
 {
-    "scrapHelmet" : ["\nscrapmetal","\nscrapmetal","\nscrapmetal","\nscrapmetal","\nscrapmetal"]
+    "scrapHelmet" : ["\nscrapmetal","\nscrapmetal","\nscrapmetal","\nscrapmetal","\nscrapmetal"],
+    "scrapBoots": ["\nscrapmetal", "\nscrapmetal", "\nscrapmetal"]
 }
