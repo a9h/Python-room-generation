@@ -240,8 +240,8 @@ def loot():
     elif generator.doors == 3:
         lucky = random.randint(1, 51)
 
-    spots = ["You peaked in a cupboard",
-             "You looked in a draw", "You opened a cabinet"]
+    spots = ["You peeked in a cupboard",
+             "You looked in a drawer", "You opened a cabinet"]
     gathered = (random.choice(generator.room["LootTables"]))
 
     if player.haslooted == False:
