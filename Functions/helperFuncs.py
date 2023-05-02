@@ -37,7 +37,17 @@ def craftingConvert(inv,ingredients):
 
 
 
-def sortinv(player, inv,ingredients):
+def sortinv(player, inv,ingredients,armour):
+
+    total = armour.head + armour.chest + armour.legs
+
+    armour.total = total/3
+
+    armour.total = round(armour.total)
+
+
+
+
     craftingConvert(inv=inv,ingredients=ingredients)
     if player.thirst > 100 or player.hunger > 100:
         player.thirst = 100
@@ -207,7 +217,7 @@ def inventory():
 
 
 
-def printinv(inv,ingredients):
+def printinv(inv,ingredients,player,armour):
     inventory()
 
 
@@ -219,9 +229,9 @@ Consumables
 ═══════════
     """ + "".join(inv.consumableInv))
 
-    exit = False
+    exit = "False"
 
-    while exit == False:
+    while exit == "False":
         print("")
         cycle = input("> ")
 
@@ -313,10 +323,36 @@ Armour
 ══════
             """ + "".join(inv.armorInv))
                         
+                    
+
+                        
         elif cycle == "exit":
             os.system("clear")
             exit = True
             pass
+
+
+
+        elif cycle == "drop":
+            dropped = input("What item would you like to drop: ")
+
+            if ("\n" + dropped) in inv.inv:
+                inv.inv.remove("\n" + dropped)
+                sortinv(armour=armour,ingredients=ingredients,inv=inv,player=player)
+                os.system("clear")
+                print(f"Dropped {dropped}")
+                input()
+
+            else:
+                print("You do not have that item...")
+                input()
+                printinv
+
+
+
+
+
+
             
 
 

@@ -1,9 +1,29 @@
 {
-    "armor" : {
-        "scrapBoots" : 15,
-        "scrapHelmet" : 35
+    "armour.head" : {
+        "scrapHelmet" : 20,
+        "ironHelmet" : 25
+
+
 
     },
+
+
+    "armour.chest" : {
+        "scrapChestplate" : 25,
+        "ironChestplate" : 35
+
+    
+    
+    },
+
+    "armour.feet": {
+        "scrapBoots" : 15,
+        "ironBoots" : 20
+    },
+
+
+
+
     "maxhealth": {
         "medicine": [15,16,17,18,19,20],
         "pills": [45,46,47,48,49,50]

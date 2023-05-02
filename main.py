@@ -12,6 +12,7 @@ from Functions.fight import fight
 from Functions.games import games
 from Functions.admin import admin
 from Functions.crafting import crafting
+from Functions.equip import equip
 
 
 
@@ -25,7 +26,7 @@ enemy = ""
 firstEnemy = True
 previous = True
 
-class ingredients:
+class ingredient:
     def __init__(self,metal,iron) -> None:
         self.metal = metal
         self.iron = iron
@@ -37,19 +38,47 @@ class ingredients:
 
 
 class armour:
-    def __init__(self,head,chest,legs) -> None:
+    def __init__(self,head,chest,legs,total) -> None:
         self.head = head
         self.chest = chest
         self.legs = legs
+        
+        self.total = total
+
+
+
+    def printarmour(self):
+
+        print(fr"""
+     ___
+    |. .| <---{self.head}
+    |[-]|
+   /#####\
+  //#####\\     <---{self.chest}
+ // ##### \\
+    ^^^^^  
+    | | |
+    |_|_| <---{self.legs}
+    [ | ]""")
+        print(f"armour will reduce damage by %{self.total}")
+
+        input()
+        os.system("clear")
 
 
 
 
 
 class generation:
-    def __init__(self, doors, room):
+    def __init__(self, doors, room,realname):
         self.doors = doors
         self.room = room
+        self.realname = realname
+
+
+
+
+
 
 
 class character:
@@ -73,6 +102,7 @@ class character:
 
 
     def giveHealth(self):
+        os.system("clear")
         Write.Print(f"""
 ╔════════╗ ╔════════════╗   ╔════════╗ ╔════════╗
 ║ health ║ ║ max health ║   ║ hunger ║ ║ thirst ║ 
@@ -84,6 +114,8 @@ class character:
            ╚═════════════════════════╝
         
 """,Colors.white, interval=0.005)
+        input()
+        os.system("clear")
 
 
 
@@ -123,8 +155,7 @@ class inventory:
 
 
 
-    def printInv(self):
-        print(f"{self.weaponInv}")
+
 
 
 
@@ -135,15 +166,15 @@ inv = inventory(["\nmedicine", "\nmedicine"],
 
 
 
-armour = armour(0,0,0)
+armour = armour(0,0,0,0)
 
 
-ingredients = ingredients(0,0)
+ingredients = ingredient(0,0)
 
 
 player = character(100, 100, 50, 100, 100, False, 
 )
-generator = generation(0, "")
+generator = generation(0, "", "")
 
 
 
@@ -195,6 +226,10 @@ def startscreen():
                 ingredients.iron = data["iron"]
                 ingredients.metal = data["metal"]
                 inv.armorInv = data["armorInv"]
+
+                armour.head = data["head"]
+                armour.chest = data["chest"]
+                armour.legs = data["legs"]
                 
 
                 print("save.json successfully loaded")
@@ -287,7 +322,8 @@ def loot():
 
 
 def choices():
-    sortinv(player=player, inv=inv,ingredients=ingredients)
+
+    sortinv(player=player, inv=inv,ingredients=ingredients,armour=armour)
 
     choice = input("> ")
     choice = choice.lower()
@@ -299,10 +335,14 @@ def choices():
         case "drop":
             dropped = input("What item would you like to drop: ")
 
-            if dropped in inv.inv:
+            if ("\n" + dropped) in inv.inv:
                 inv.inv.remove("\n" + dropped)
+                sortinv(armour=armour,ingredients=ingredient,inv=inv,player=player)
+                print(f"Dropped {dropped}")
+                choices()
             else:
                 print("You do not have that item...")
+                input()
                 choices()
 
         case "help":
@@ -339,8 +379,8 @@ def choices():
                 choices()
 
         case "inv":
-            sortinv(player=player,inv=inv,ingredients=ingredients)
-            printinv(inv=inv,ingredients=ingredients)
+            sortinv(player=player,inv=inv,ingredients=ingredients,armour=armour)
+            printinv(player=player,inv=inv,ingredients=ingredients,armour=armour)
             choices()
 
         case "admin":
@@ -365,13 +405,26 @@ def choices():
 
                 if ("\n" + useable) in inv.inv:
                     use(useable, False, player=player,inv=inv)
-                    sortinv(player=player,inv=inv,ingredients=ingredients)
+                    sortinv(player=player,inv=inv,ingredients=ingredients,armour=armour)
                     choices()
 
                 else:
 
                     print("You do not have that item")
                     choices()
+
+        case "equip":
+            if inv.armorInv == [""]:
+                print("You have nothing to equip")
+            else:
+                equip(inv=inv,armour=armour)
+                choices()
+
+
+        case "armour":
+            armour.printarmour()
+            choices()
+
 
         case "health":
             player.giveHealth()
@@ -401,7 +454,10 @@ def choices():
                         "weaponInv":inv.weaponInv, 
                         "metal": ingredients.metal,
                         "iron": ingredients.iron,
-                        "armorInv" : inv.armorInv
+                        "armorInv" : inv.armorInv,
+                        "head" : armour.head,
+                        "chest" : armour.chest,
+                        "legs" : armour.legs
 
                     }
 
@@ -410,13 +466,18 @@ def choices():
                     with open("Json/save.json", "w") as outfile:
                         outfile.write(json_object)
                     print("game saved")
+
                     choices()
 
                 case "n":   
+
                     choices()
 
                 case _:
                     choices()
+
+
+                
 
         case "load":
             with open("Json/save.json", "r") as f:
@@ -436,6 +497,9 @@ def choices():
                 ingredients.iron = data["iron"]
                 ingredients.metal = data["metal"]
                 inv.armorInv = data["armorInv"]
+                armour.head = data["head"]
+                armour.chest = data["chest"]
+                armour.legs = data["legs"]
 
                 print("save.json successfully loaded")
 
@@ -529,12 +593,12 @@ def encounterChoice():
             else:
 
                 print("You can use anything in your inventory " +
-                      "".join(inv.consumableInv, inv.healthInv))
+                      "".join(inv.healthInv)+"".join(inv.consumableInv))
                 useable = input("What would you like to use: ")
 
                 if ("\n" + useable) in inv.inv:
                     use(useable, "enemy", player=player, inv=inv)
-                    sortinv(player=player,inv=inv,ingredients=ingredients)
+                    sortinv(player=player,inv=inv,ingredients=ingredients,armour=armour)
                     encounterChoice()
 
                 else:
@@ -552,15 +616,15 @@ def encounterChoice():
                 encounterChoice()
 
         case "fight":
-            fight(player=player, enemy=enemy, enemyhealth=enemyhealth, inv=inv)
+            fight(player=player, enemy=enemy, enemyhealth=enemyhealth, inv=inv,armour=armour)
             time.sleep(2)
             room()
             generation()
             previous = True
 
         case "inv":
-            sortinv(player=player,inv=inv,ingredients=ingredients)
-            printinv(inv=inv,ingredients=ingredients)
+            sortinv(player=player,inv=inv,ingredients=ingredients,armour=armour)
+            printinv(player=player,inv=inv,ingredients=ingredients,armour=armour)
 
             encounterChoice()
 
@@ -605,8 +669,8 @@ def traderchoice():
 
     match choice:
         case "inv":
-            sortinv(player=player,inv=inv,ingredients=ingredients)
-            printinv(inv=inv,ingredients=ingredients)
+            sortinv(player=player,inv=inv,ingredients=ingredients,armour=armour)
+            printinv(player=player,inv=inv,ingredients=ingredients,armour=armour)
             traderchoice()
 
         case "drop":
@@ -632,7 +696,7 @@ def traderchoice():
                 if ("\n" + useable) in inv.inv:
                     
                     use(useable, "trader", player=player,inv=inv)
-                    sortinv(player=player, inv=inv,ingredients=ingredients)
+                    sortinv(player=player, inv=inv,ingredients=ingredients,armour=armour)
 
                 else:
                     print("You do not have that item")
@@ -734,7 +798,7 @@ def generation():
     elif isTrue == True and encounter == False and traderEnc == False:
         os.system("clear")
         realname = (generator.room["RoomName"])
-
+        generator.realname = realname
         Write.Print(f"""you find yourself in a {realname} with {generator.doors} door(s)
 """, Colors.white, interval=0.005)
         choices()

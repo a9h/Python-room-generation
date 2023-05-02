@@ -114,9 +114,8 @@ def make(inv,ingredients):
                                                 crafting(inv=inv,ingredients=ingredients)
 
                                 else:
-                                        print(f"You cannot make {choice}")
-                                        input
-                                        crafting(inv=inv,ingredients=ingredients)
+                                        pass
+
                                         
                                                 
 
@@ -157,7 +156,7 @@ def crafting(inv,ingredients):
                 case "make":
                         make(inv=inv,ingredients=ingredients)
                 case "exit": 
-                        pass
+                        os.system("clear")
                 case _:
                         crafting(inv=inv,ingredients=ingredients)
         

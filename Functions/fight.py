@@ -3,7 +3,7 @@ import json
 import os
 from pystyle import Write, Colors
 
-def fight(player, enemy, enemyhealth, inv):
+def fight(player, enemy, enemyhealth, inv,armour):
 
     weaponInv = []
     for x in inv.inv:
@@ -23,6 +23,9 @@ def fight(player, enemy, enemyhealth, inv):
         else:
             print("Fatal error!")
 
+
+        damageTaken = damageTaken - damageTaken * armour.total / 100
+        damageTaken = round(damageTaken)
         player.cHealth -= damageTaken
 
         os.system("clear")
@@ -97,6 +100,8 @@ def fight(player, enemy, enemyhealth, inv):
                     damageTaken = random.randint(2, 25)
                 else:
                     print("Fatal error!")
+                damageTaken = damageTaken - damageTaken * armour.total / 100
+                damageTaken = round(damageTaken)
                 player.cHealth -= damageTaken
                 print(
                     f"The enemy slashed you and dealt {damageTaken} damage. You now have {player.cHealth} health remaining")
