@@ -28,6 +28,20 @@ previous = True
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class shop1:
     def __init__(self,food1,food2,weapon,firstTime,tool) -> None:
 
@@ -189,7 +203,7 @@ class character:
 
 class inventory:
     def __init__(self,inv, weaponInv, craftingInv, 
-                 consumableInv, healthInv,armorInv) -> None:
+                 consumableInv, healthInv,armorInv,toolInv) -> None:
         
 
         self.inv = inv
@@ -206,6 +220,8 @@ class inventory:
         
         self.armorInv = armorInv
 
+        self.toolInv = toolInv
+
 
 
 
@@ -216,7 +232,7 @@ shop = shop1("","","",True,"")
 
 
 inv = inventory(["\nmedicine", "\nmedicine"], 
-[""],[""],[""],[""], [""])
+[""],[""],[""],[""], [""], "")
 
 
 
@@ -285,6 +301,8 @@ def startscreen():
                 armour.head = data["head"]
                 armour.chest = data["chest"]
                 armour.legs = data["legs"]
+
+                inv.toolInv = data["tools"]
                 
 
                 print("save.json successfully loaded")
@@ -512,7 +530,8 @@ def choices():
                         "armorInv" : inv.armorInv,
                         "head" : armour.head,
                         "chest" : armour.chest,
-                        "legs" : armour.legs
+                        "legs" : armour.legs,
+                        "tools" : inv.toolInv
 
                     }
 
@@ -530,6 +549,12 @@ def choices():
 
                 case _:
                     choices()
+
+        case "breakdown":
+            breakdown(inv=inv,ingredients=ingredient)
+            os.system("clear")
+            choices()
+
 
 
                 
@@ -555,6 +580,7 @@ def choices():
                 armour.head = data["head"]
                 armour.chest = data["chest"]
                 armour.legs = data["legs"]
+                inv.toolInv = data["tools"]
 
                 print("save.json successfully loaded")
 

@@ -8,16 +8,22 @@ import os
 
 def craftingConvert(inv,ingredients):
     counter = 0
+    counter2 = 0
     for item in inv.inv:
 
 
         if item == "\nscrapmetal":
             counter +=1
 
+        elif item == "\niron":
+            counter2 += 1
+
+
         else:
             pass
 
     ingredients.metal = counter
+    ingredients.iron = counter2
 
 
 
@@ -65,6 +71,7 @@ def sortinv(player, inv,ingredients,armour):
     inv.consumableInv = [""]
     inv.healthInv = [""]
     inv.armorInv = [""]
+    inv.toolInv = [""]
     with open("Json/itemLists.json", "r") as f:
     
         data = json.load(f)
@@ -94,6 +101,8 @@ def sortinv(player, inv,ingredients,armour):
                         inv.healthInv.append(item)
                     elif item in data["armorList"]:
                         inv.armorInv.append(item)
+                    elif item in data["toolList"]:
+                        inv.toolInv.append(item)
 
 
 
@@ -126,6 +135,8 @@ def sortinv(player, inv,ingredients,armour):
                     elif item in data["armorList"]:
                         inv.armorInv.append(f"{duplicate} x{count}")
 
+                    elif item in data["toolList"]:
+                        inv.toolInv.append(item)
 
                     else:
                         print("mad error")
@@ -139,6 +150,19 @@ def sortinv(player, inv,ingredients,armour):
                 inv.weaponInv.remove(item)
             else:
                 pass
+
+    uniqueT = list(set(inv.toolInv))
+    inv.toolInv = uniqueT
+
+    for item in inv.toolInv:
+        for num in range(100):
+            if (item+f" x{num}") in inv.toolInv:
+                inv.toolInv.remove(item)
+            else:
+                pass
+
+
+
 
 
 
@@ -236,7 +260,7 @@ Consumables
         cycle = input("> ")
 
         if cycle == ">":
-            if counter + 1 > 4:
+            if counter + 1 > 5:
                 counter = 0
             else:
                 counter = counter +1
@@ -278,11 +302,20 @@ Crafting
 Armour
 ══════
             """ + "".join(inv.armorInv))
+                        
+
+                    case 5:
+                        inventory()
+                        print("""
+Tools
+═════
+            """ + "".join(inv.toolInv))
+
                     
 
         elif cycle == "<":
             if counter - 1 < 0:
-                counter = 4
+                counter = 5
             else:
                 counter = counter - 1
             match counter:
@@ -322,6 +355,13 @@ Crafting
 Armour
 ══════
             """ + "".join(inv.armorInv))
+                        
+                    case 5:
+                        inventory()
+                        print("""
+Tools
+═════
+            """ + "".join(inv.toolInv))
                         
                     
 

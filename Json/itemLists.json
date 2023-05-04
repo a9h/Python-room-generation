@@ -2,12 +2,14 @@
     "weaponList" : ["\nknife", "\nfork", "\nbat",
     "\ntorch", "\ncrowbar", "\nbranch", "\nshovel", "\nsword", "\nlongsword"],
 
-    "craftingList" : ["\nscrapmetal", "\niron", "\ngrindstone"],
+    "craftingList" : ["\nscrapmetal", "\niron",  "ironBar"],
 
     "consumableList" : ["\ntomato","\ncannedfood","\ncarrot", "\nwaterbottle", "\nsteak", "\nchocolate", "\nmushroom"],
 
     "healthList" : ["\nmedkit","\npills", "\nbandage", "\nmedicine"],
 
-    "armorList" : ["\nscrapHelmet", "\nscrapBoots"]
+    "armorList" : ["\nscrapHelmet", "\nscrapBoots"],
+
+    "toolList": ["\ngrindstone", "\nhardenedBlade"]
 
 }

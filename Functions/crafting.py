@@ -21,6 +21,8 @@ craftables = craftables([], [])
 
 def getRecepies(ingredients):
 
+        craftables.completeRecipies = []
+
 
 
 
@@ -68,7 +70,10 @@ def getRecepies(ingredients):
                         
                                 
 def make(inv,ingredients):
-        print("available recipies: \n".join(craftables.completeRecipies))
+        print("You can make:")
+
+        for item in craftables.completeRecipies:
+                print("".join(item))
 
 
         if craftables.completeRecipies == []:
@@ -80,7 +85,7 @@ def make(inv,ingredients):
                         choice = input("> ")
                         for thing in data:
                                 
-                                if thing == choice:
+                                if thing.lower() == choice.lower():
                                         scrapcount = 0
                                         ironcount = 0
                                         for b in data[thing]:
@@ -141,9 +146,9 @@ def crafting(inv,ingredients):
     ║    ╔═╗  ╦═╗  ╔═╗  ╔═╗  ╔╦╗  ╦  ╔╗╔  ╔═╗    ║  
     ║    ║    ╠╦╝  ╠═╣  ╠╣    ║   ║  ║║║  ║ ╦    ║
     ║    ╚═╝  ╩╚═  ╩ ╩  ╚     ╩   ╩  ╝╚╝  ╚═╝    ║
-    ╚════════════════════════════════════════════╝
-            Use 'make' to start crafting                                                    
-            ═══════════════════════════╝                           
+    ╚══════╦════════════════════════════╦════════╝
+           ║Use 'make' to start crafting║                                                    
+           ╚════════════════════════════╝                           
 """, Colors.white, interval=0.005)
 
 
