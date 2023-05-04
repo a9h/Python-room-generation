@@ -16,8 +16,11 @@
     "longsword" : 150
 
 
+  },
+  "tools" : {
+      "grindstone" : 225
+    }
   }
 
 
 
-}

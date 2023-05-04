@@ -94,10 +94,13 @@ def fight(player, enemy, enemyhealth, inv,armour):
             if enemyhealth > 0:
                 if enemy == "hard":
                     damageTaken = random.randint(50, 90)
+                    coinsLooted = random.randint(100,150)
                 elif enemy == "medium":
                     damageTaken = random.randint(25, 50)
+                    coinsLooted = random.randint(30,75)
                 elif enemy == "easy":
                     damageTaken = random.randint(2, 25)
+                    coinsLooted = random.randint(10,30)
                 else:
                     print("Fatal error!")
                 damageTaken = damageTaken - damageTaken * armour.total / 100
@@ -107,7 +110,7 @@ def fight(player, enemy, enemyhealth, inv,armour):
                     f"The enemy slashed you and dealt {damageTaken} damage. You now have {player.cHealth} health remaining")
                 print("")
 
-        coinsLooted = random.randint(1, 50)
+   
         print(
             f"You killed the enemy and ran to another room, and looted £{coinsLooted}")
         player.money += coinsLooted

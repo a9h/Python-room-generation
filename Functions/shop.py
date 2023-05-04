@@ -1,51 +1,63 @@
-def buy(weaponForSale, food1, food2, data, player,inv):
-    food1Price = (data["food"][food1])
-    food2Price = (data["food"][food2])
-    if weaponForSale == "":
+def buy(shop, data, player,inv):
+    food1Price = (data["food"][shop.food1])
+    food2Price = (data["food"][shop.food2])
+
+
+    if shop.weapon == "":
         pass
     else:
-        weaponPrice = (data["weapons"][weaponForSale])
+        weaponPrice = (data["weapons"][shop.weapon])
 
-    if weaponForSale == "":
-        print(f"The trader has:\n" + food1, "-", data["food"][food1])
-        print(food2, "-", data["food"][food2])
-
+    if shop.tool == "":
+        pass
     else:
-        print(f"The trader has:\n" + food1, "-", data["food"][food1])
-        print(food2, "-", data["food"][food2])
-        print(weaponForSale, "-", data["weapons"][weaponForSale])
+        toolPrice = (data["tools"][shop.tool])
 
-    print("You can buy anything listed as long as you have enough coins")
+
+
+    print("What would you like to purchase!")
     tobuy = input("> ")
-    if tobuy.lower() == food1:
+    if tobuy.lower() == shop.food1:
         confirm = input(f"This costs £{food1Price} are you sure? y/n\n> ")
         if confirm == "y":
             if player.money > food1Price or player.money == food1Price:
                 player.money -= food1Price
-                inv.inv.append("\n" + food1)
+                inv.inv.append("\n" + shop.food1)
                 print(f"You now have £{player.money} remaining")
 
             else:
                 print("You do not have enough money for this item.")
 
-    elif tobuy.lower() == food2:
+    elif tobuy.lower() == shop.food2:
         confirm = input(f"This costs £{food2Price} are you sure? y/n\n> ")
         if confirm == "y":
             if player.money > food2Price or player.money == food2Price:
                 player.money -= food2Price
-                inv.inv.append("\n" + food2)
+                inv.inv.append("\n" + shop.food2)
                 print(f"You now have £{player.money} remaining")
 
             else:
                 print("You do not have enough money for this item.")
 
-    elif tobuy.lower() == weaponForSale:
+    elif tobuy.lower() == shop.weapon:
         confirm = input(f"This costs £{weaponPrice} are you sure? y/n\n> ")
         if confirm == "y":
             if player.money > weaponPrice or player.money == weaponPrice:
                 player.money -= weaponPrice
-                inv.inv.append("\n" + weaponForSale)
+                inv.inv.append("\n" + shop.weapon)
                 print(f"You now have £{player.money} remaining")
+
+
+
+
+    elif tobuy.lower() == shop.tool:
+        confirm = input(f"This costs £{toolPrice} are you sure? y/n\n> ")
+        if confirm == "y":
+            if player.money >= toolPrice:
+                player.money -= toolPrice
+                inv.inv.append("\n" + shop.tool)
+                print(f"You now have £{player.money} remaining")
+            
 
             else:
                 print("You do not have enough money for this item.")

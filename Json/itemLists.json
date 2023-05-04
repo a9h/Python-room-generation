@@ -2,7 +2,7 @@
     "weaponList" : ["\nknife", "\nfork", "\nbat",
     "\ntorch", "\ncrowbar", "\nbranch", "\nshovel", "\nsword", "\nlongsword"],
 
-    "craftingList" : ["\nscrapmetal"],
+    "craftingList" : ["\nscrapmetal", "\niron", "\ngrindstone"],
 
     "consumableList" : ["\ntomato","\ncannedfood","\ncarrot", "\nwaterbottle", "\nsteak", "\nchocolate", "\nmushroom"],
 

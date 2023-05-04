@@ -13,18 +13,71 @@ from Functions.games import games
 from Functions.admin import admin
 from Functions.crafting import crafting
 from Functions.equip import equip
+from Functions.breakdown import breakdown
 
 
 
 
-food1 = ""
-food2 = ""
-weaponForSale = ""
 
 
 enemy = ""
 firstEnemy = True
 previous = True
+
+
+
+
+
+class shop1:
+    def __init__(self,food1,food2,weapon,firstTime,tool) -> None:
+
+        self.food1 = food1
+        self.food2 = food2
+        self.weapon = weapon
+        self.firstTime = firstTime
+        self.tool = tool
+
+
+    def loadShop(self):
+            with open("Json/shop.json", "r") as f:
+                data = json.load(f)
+
+                self.food1 = (random.choice(list(data["food"])))
+                self.food2 = (random.choice(list(data["food"])))
+
+
+
+                while shop.food1 == shop.food2:
+                    self.food2 = (random.choice(list(data["food"])))
+
+                toolChance =  random.randint(1,100)
+                if toolChance <100:
+                    self.tool = random.choice(list(data["tools"]))
+
+                
+
+                weaponChance = random.randint(1, 50)
+                if weaponChance > 25:
+                    self.weaponForSale = (random.choice(list(data["weapons"])))
+
+                self.firstTime = False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class ingredient:
     def __init__(self,metal,iron) -> None:
@@ -156,6 +209,8 @@ class inventory:
 
 
 
+
+shop = shop1("","","",True,"")
 
 
 
@@ -626,7 +681,7 @@ def encounterChoice():
             sortinv(player=player,inv=inv,ingredients=ingredients,armour=armour)
             printinv(player=player,inv=inv,ingredients=ingredients,armour=armour)
 
-            encounterChoice()
+            encounterChoice() 
 
         case "health":
             player.giveHealth()
@@ -645,24 +700,13 @@ def randomEncounter():
 
 
 def traderchoice():
-    global food1, food2, weaponForSale
-    global firstTime
-    with open("Json/shop.json", "r") as f:
-        data = json.load(f)
 
-        if firstTime == True:
 
-            food1 = (random.choice(list(data["food"])))
-            food2 = (random.choice(list(data["food"])))
 
-            while food1 == food2:
-                food2 = (random.choice(list(data["food"])))
 
-            weaponChance = random.randint(1, 50)
-            if weaponChance > 25:
-                weaponForSale = (random.choice(list(data["weapons"])))
+    if shop.firstTime == True:
+            shop.loadShop()
 
-            firstTime = False
             traderchoice()
 
     choice = input("> ")
@@ -709,28 +753,45 @@ def traderchoice():
 
         case "shop":
 
-            if firstTime == False:
-                if weaponForSale == "":
-                    print(f"The trader has:\n" + food1,
-                          "-", data["food"][food1])
-                    print(food2, "-", data["food"][food2])
-                else:
-                    print(f"The trader has:\n" + food1,
-                          "-", data["food"][food1])
-                    print(food2, "-", data["food"][food2])
-                    print(weaponForSale, "-", data["weapons"][weaponForSale])
+            if shop.firstTime == False:
+                with open ("Json/shop.json", "r") as f:
+                    data = json.load(f)
+                    if shop.weapon == "":
+                        print(f"The trader has:\n" + shop.food1,
+                            "-", data["food"][shop.food1])
+                        print(shop.food2, "-", data["food"][shop.food2])
+                        if shop.tool == "":
+                            pass
+                        else:
+                            print(shop.tool, "-", data["tools"][shop.tool])
+
+
+
+
+                    else:
+                        print(f"The trader has:\n" + shop.food1,
+                            "-", data["food"][shop.food1])
+                        print(shop.food2, "-", data["food"][shop.food2])
+                        print(shop.weapon), "-", data["weapons"][shop.weapon]
+                        if shop.tool == "":
+                            pass
+                        else:
+                            print(shop.tool, "-", data["tool"][shop.tool])
+
 
                 traderchoice()
 
         case "leave":
+            shop.firstTime = True
             os.system("clear")
             room()
             generation()
 
         case "buy":
-            buy(weaponForSale=weaponForSale, food1=food1,
-                food2=food2, data=data, player=player,inv=inv)
-            traderchoice()
+            with open ("Json/shop.json", "r") as f:
+                data = json.load(f)
+                buy(shop=shop, data=data, player=player,inv=inv)
+                traderchoice()
 
         case "games":
             games(player=player)
