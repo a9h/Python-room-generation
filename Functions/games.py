@@ -105,22 +105,22 @@ def higherOrLower(player1):
         
 
 
-    if guess == "high" or guess == "low":
-            if guess == "high" and hint < number:
+    if guess == "higher" or guess == "lower":
+            if guess == "higher" and hint < number:
                 print(f"Correct! the number was {number}")
-                toAdd = float(guess) * 1.5
+                toAdd = float(bet) * 1.5
                 player1.money = player1.money + toAdd
-            elif guess.content == "low" and hint > number:
+            elif guess.content == "lower" and hint > number:
 
                 print(f"correct! the number was {number}")
-                toAdd = float(guess) * 1.5
+                toAdd = float(bet) * 1.5
                 player1.money = player1.money + toAdd
-            elif guess.content == "low" and number > hint or guess.content == "high" and number < hint:
+            elif guess.content == "lower" and number > hint or guess.content == "high" and number < hint:
                 print(f"WRONG! the number was {number}")
                 
             elif guess == number:
                 print("SPOT ON! Your bet was multiplied by 8x")
-                toAdd = float(guess) * 8
+                toAdd = float(bet) * 8
                 player1.money = player1.money + toAdd
 
 
