@@ -27,26 +27,20 @@ def use(item, encounter, player,inv):
             randomHunger = random.choice(findHunger[item])
             randomThirst = random.choice(findThirst[item])
 
-            hungerDifference = 100 - player.hunger
-            thirstDifference = 100 - player.thirst
-            if randomThirst > thirstDifference:
-                player.thirst += thirstDifference
-                if player.thirst > 100:
-                    player.thirst = 100
-                else:
-                    pass
-
-            if randomHunger > hungerDifference:
-                player.hunger += hungerDifference
-                if player.hunger > 100:
-                    player.hunger = 100
-                else:
-                    pass
 
 
-            else:
-                player.hunger += randomHunger
-                player.thirst += randomThirst
+
+
+            player.hunger += randomHunger
+            player.thirst += randomThirst
+
+            if player.hunger > 100:
+                player.hunger = 100
+            if player.thirst > 100:
+                player.thirst = 100
+
+            
+                
             print(f"you used {item} and gained {randomHunger} hunger and {randomThirst} thirst")
             print(f"your current hunger and thirst levels are {player.hunger} and {player.thirst}")
             inv.inv.remove("\n" + item)
