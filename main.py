@@ -231,8 +231,8 @@ shop = shop1("","","",True,"")
 
 
 
-inv = inventory(["\nmedicine", "\nmedicine"], 
-[""],[""],[""],[""], [""], "")
+inv = inventory(["\nmedicine"], 
+["\nmedicine"],[""],[""],[""], [""], "")
 
 
 
@@ -477,8 +477,11 @@ def choices():
                 useable = input("What would you like to use: ")
 
                 if ("\n" + useable) in inv.inv:
+
                     use(useable, False, player=player,inv=inv)
+                    
                     sortinv(player=player,inv=inv,ingredients=ingredients,armour=armour)
+                    
                     choices()
 
                 else:
